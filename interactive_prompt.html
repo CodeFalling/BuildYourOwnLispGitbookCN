@@ -34,7 +34,7 @@
 
 
         
-    <div class="book" data-github="CodeFalling/BuildYourOwnLispGitbookCN" data-level="3" data-basepath="." data-revision="1407134869260">
+    <div class="book" data-github="CodeFalling/BuildYourOwnLispGitbookCN" data-level="3" data-basepath="." data-revision="1407420421841">
     <div class="book-header">
     <!-- Actions Left -->
     <a href="#" class="btn pull-left toggle-summary" aria-label="Toggle summary"><i class="fa fa-align-justify"></i></a>
@@ -475,33 +475,33 @@
                 
                     <section class="normal" id="section-gitbook_11">
                     
-                        <h1 id="an-interactive-prompt">An Interactive Prompt</h1>
-<h2 id="read-evaluate-print">Read, Evaluate, Print</h2>
+                        <h1 id="interactive-prompt">交互式提示符(interactive prompt)</h1>
+<h2 id="read-evaluate-print">读取，计算，打印(Read, Evaluate, Print)</h2>
 <p><img src="img/reptile.png" alt="reptile" title="Reptile &bull; Sort of like REPL"></p>
-<p>As we build our programming language we&#39;ll need some way to interact with it. C uses a compiler, where you can change the program, recompile and run it. It&#39;d be good if we could do something better, and interact with the language dynamically. Then we test its behaviour under a number of conditions very quickly. For this we can built something called an <em>interactive prompt</em>.</p>
-<p>This is a program that prompts the user for some input, and when supplied with it, replies back with some message. Using this will be the easiest way to test our programming language and see how it acts. This system is also called a <em>REPL</em>, which stands for <em>read</em>-<em>evaluate</em>-<em>print</em> <em>loop</em>. It is a common way of interacting with a programming language which you may have used before in languages such as <em>Python</em>.</p>
-<p>Before building a full <em>REPL</em> we&#39;ll start with something simpler. We are going to make a system that prompts the user, and echoes any input straight back. If we make this we can later extend it to parse the user input and evaluate it, as if it were an actual Lisp program.</p>
-<h2 id="an-interactive-prompt">An Interactive Prompt</h2>
-<p>For the basic setup we want to write a loop which repeatedly writes out a message, and then waits for some input. To get user input we can use a function called <code>fgets</code>, which reads any input up until a newline. We need somewhere to store this user input. For this we can declare a constantly sized input buffer.</p>
-<p>Once we have this user input stored we can then print it back to the user using a function called <code>printf</code>.</p>
+<p>既然我们打造我们自己的编程语言，我们需要和它交互的方法。C语言使用了一个编译器，所以你可以修改程序，重新编译然后运行它。如果我们能做的更好并且能够动态的和编程语言交互那就更棒了。然后我们就很快的在若干条件下测试它的特性。为了做到这一点我们要构造一个叫做<em>交互式提示符(interactive prompt)</em>的东西。</p>
+<p>这是一个程序，它可以提示用户输入，并且得到输入后返回一些信息。用这个是测试我们编程语言的最简单的方法。这种系统也叫 <em>REPL</em>, 代笔 <em>read(读)</em>-<em>evaluate(计算)</em>-<em>print(打印)</em> <em>loop(循环)</em>。这是常用的一种和编程语言交互的方法，你可能在例如 <em>Python</em> 的其他语言里使用过。</p>
+<p>在建立一个完整的 <em>REPL</em> 之前我们将从一些简单的事情开始。我们将构造一个系统，它可以提示用户，并且直接将输入返回给用户。 如果我们做到这一点，我们以后就可以扩展它来解析用户输入并计算，就像一个实际的 Lisp 程序一样。</p>
+<h2 id="">一个交互式终端</h2>
+<p>为了一个基本的体系，我们将要写一个循环，它反复的写出消息，然后等待输入。为了获取用户的输入我们可以用一个叫 <code>fget</code> 的函数，它读取输入直到遇到换行符。我们需要找一个地方来存储用户输入。为了这一点我们可以声明一个不变大小的输入缓冲区(buffer)。 </p>
+<p>一旦我们存储了用户的输入后就可以把它输出给用户，这要用到一个叫做 <code>printf</code> 函数。</p>
 <pre><code class="lang-c"><span class="hljs-preprocessor">#include &lt;stdio.h&gt;</span>
 
-<span class="hljs-comment">/* Declare a static buffer for user input of maximum size 2048 */</span>
+<span class="hljs-comment">/* 声明一个静态缓冲区，允许用户最大的大小为2048的输入 */</span>
 <span class="hljs-keyword">static</span> <span class="hljs-keyword">char</span> input[<span class="hljs-number">2048</span>];
 
 <span class="hljs-keyword">int</span> main(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span>** argv) {
 
-  <span class="hljs-comment">/* Print Version and Exit Information */</span>
+  <span class="hljs-comment">/* 输出版本和退出信息 */</span>
   <span class="hljs-built_in">puts</span>(<span class="hljs-string">"Lispy Version 0.0.0.0.1"</span>);
   <span class="hljs-built_in">puts</span>(<span class="hljs-string">"Press Ctrl+c to Exit\n"</span>);
 
-  <span class="hljs-comment">/* In a never ending loop */</span>
+  <span class="hljs-comment">/* 一个永远不会停下的循环 */</span>
   <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>) {
 
-    <span class="hljs-comment">/* Output our prompt */</span>
+    <span class="hljs-comment">/* 输出提示 */</span>
     <span class="hljs-built_in">fputs</span>(<span class="hljs-string">"lispy&gt; "</span>, stdout);
 
-    <span class="hljs-comment">/* Read a line of user input of maximum size 2048 */</span>
+    <span class="hljs-comment">/* 读取一行用户的输入，最大大小2048 */</span>
     fgets(input, <span class="hljs-number">2048</span>, stdin);
 
     <span class="hljs-comment">/* Echo input back to user */</span>
@@ -512,31 +512,31 @@
 }
 </code></pre>
 <div class="alert alert-warning">
-  <strong>What is that text in light gray?</strong>
+  <strong>这个灰色的文本是什么?</strong>
 
-  The above code contains <em>comments</em>. These are sections of the code between <code>/*</code> <code>*/</code> symbols, which are ignored by the compiler, but are used to inform the person reading what is going on. Take notice of them!
+  上面包含<em>注释</em>的代码。它们是在符号 <code>/*</code> 和 <code>*/</code> 之间的部分, 注释会被编译器忽略，但是被用于告诉阅读这段代码的人到底是怎么回事。注意它们！
 </div>
 
-<p>Lets go over this program in a little more depth.</p>
-<p>The line <code>static char input[2048];</code> declares a global array of 2048 characters. This is a reserved block of data we can access anywhere from our program. In it we are going to store the user input which is typed into the command line. The <code>static</code> keyword make this variable local to this file, and the <code>[2048]</code> section is what declares the size.</p>
-<p>We write an infinite loop using <code>while (1)</code>. In a conditional block <code>1</code> always evaluates to true. Therefore commands inside this loop will run forever.</p>
-<p>To output our prompt we use the function <code>fputs</code>. This is a slight variation on <code>puts</code> which does not append a newline character. We use the <code>fgets</code> function for getting user input from the command line. Both of these functions require some file to write to, or read from. For this we supply the special variables <code>stdin</code> and <code>stdout</code>. These are declared in <code>&lt;stdio.h&gt;</code> and are special file variables representing input to, and output from, the command line. When passed this variable the <code>fgets</code> function will wait for a user to input a line of text, and when it has it will store it into the <code>input</code> buffer, including the newline character. So that <code>fgets</code> does not read in too much data we also must supply the size of the buffer <code>2048</code>.</p>
-<p>To echo the message back to the user we use the function <code>printf</code>. This is a function that provides a way of printing messages consisting of several elements. It matches arguments to patterns in the given string. For example in our case we can see the <code>%s</code> pattern in the given string. This means that it will be replaced by whatever argument is passed in next, interpreted as a string.</p>
-<p>For more information on these different patterns please see the <a href="http://en.cppreference.com/w/c/io/printf" target="_blank">documentation</a> on <code>printf</code>.</p>
+<p>让我们深入的复习一下这个程序。</p>
+<p><code>static char input[2048];</code> 这一行声明了一个公有的2048个字符数组。这是一个保留的数据块，我们可以在程序的任何地方使用它。我们将要把用户在命令行里的输入存储到里面。<code>static</code> 这个关键词(keyword)让这个变量属于这个文件局部，并且 <code>[2048]</code> 这个部分声明了它的大小。</p>
+<p>我们用 <code>while (1)</code> 写了一个无限循环。条件块 1 总是等同于 true(真)。因此循环里的命令将会永远运行。</p>
+<p>为了在我们使用函数 <code>fputs</code> 时能够输出我们的提示。这和 <code>puts</code> 略有不同，它并不尾部追加一个换行符。我们用 <code>fgets</code> 函数来获取用户在命令行的输入。这两个函数需要一些文件来读写。为了这一点我们提供了两个特殊的变量 <code>stdin</code> 和 <code>stdout</code>。它们被声明在 <code>&lt;stdio.h&gt;</code> 里，而且是特殊的文件变量，代表着从命令行的输入输出。当传递这个变量的时候函数 <code>fputs</code>将会等待用户输入一行文本，得到输入后便将它存储在 <code>input</code> 里，包括换行符。所以 <code>fgets</code> 并不会读取太多数据，我们提供一个大小为2048的缓冲区便足够了。</p>
+<p>为了将消息显示给用户我们需要用到函数 <code>printf</code>。这个函数提供了一个方法可以打印由不同元素组成的信息。它按照给定的格式字符串来匹配参数。例如在我们的例子中我们在格式字符串里可以看到 <code>%s</code>。这意味着它将被接下来传递的参数替代，解释为一个字符串。</p>
+<p>关于更多关于 <code>printf</code> 的不同格式字符串的信息请看 <a href="http://en.cppreference.com/w/c/io/printf" target="_blank">documentation</a></p>
 <div class="alert alert-warning">
-  <strong>How am I meant to know about functions like <code>fgets</code> and <code>printf</code>?</strong>
+  <strong>我如何了解像 <code>fgets</code> 和 <code>printf</code>这样的函数呢?</strong>
 
-  It isn&#39;t immediately obvious how to know about these standard functions, and when to use them. When faced with a problem it takes experience to know when it has been solved for you by library functions.
+  如何了解这些标准函数，以及什么时候使用它们并不是显而易见的。当面对一个问题时知道有什么已经解决了您的问题的库函数是需要经验的。
 
-  Luckily C has a very small standard library and almost all of it can be learnt in practice. If you want to do something that seems quite basic, or fundamental, it is worth looking at the <a href="http://en.cppreference.com/w/c" target="_blank">reference documentation</a> for the standard library and checking if there are any functions included that do what you want.
+  幸运的是C语言有一个非常小的标准库而且它们中的大部分可以在练习中被学习。如果你想做一些基础或者根本的事情，那你值得看一看标准库的<a href="http://en.cppreference.com/w/c" target="_blank">参考文档</a>，并检查这里是否有你想要的函数。
 </div>
 
 
-<h2 id="compilation">Compilation</h2>
-<p>You can compile this with the same command as was used in the second chapter.</p>
+<h2 id="">编译</h2>
+<p>你可以使用和第二章中一样的命令编译</p>
 <pre><code class="lang-shell">cc -std=c99 -Wall prompt.c -o prompt
 </code></pre>
-<p>After compiling this you should try to run it. You can use <code>Ctrl+c</code> to quit the program when you are done. If everything is correct your program should run something like this.</p>
+<p>在编译后你可以试着运行它。但你完成的时候你可以使用 <code>Ctrl+c</code> 来退出程序。如果一切都正确的话你应该可以像这样运行你的程序</p>
 <pre><code class="lang-lispy">Lispy Version 0.0.0.0.1
 Press Ctrl+c to Exit
 
@@ -548,19 +548,19 @@ lispy&gt; Stop being so rude!
 No You&#39;re a Stop being so rude!
 lispy&gt;
 </code></pre>
-<h2 id="editing-input">Editing input</h2>
-<p>If you&#39;re working on Linux or Mac you&#39;ll notice some weird behaviour when you use the arrow keys to attempt to edit your input.</p>
+<h2 id="">编辑输入</h2>
+<p>如果你正在 Linux 或者是 Mac 下工作你将会发现在你输入时使用方向键时有一些奇怪的表现。</p>
 <pre><code class="lang-lispy">Lispy Version 0.0.0.0.3
 Press Ctrl+c to Exit
 
 lispy&gt; hel^[[D^[[C
 </code></pre>
-<p>Using the arrow keys is creating these weird characters <code>^[[D</code> or <code>^[[C</code>, rather than moving the cursor around in the input. What we really want is to be able to move around on the line, deleting and editing the input in case we make a mistake.</p>
-<p>On Windows this behaviour is the default. On Linux and Mac it is provided by a library called <code>editline</code>. On Linux and Mac we need to replace our calls to <code>fputs</code> and <code>fgets</code> with calls to functions this library provides.</p>
-<p>If you&#39;re developing on Windows and just want to get going, feel free to skip to the end of this chapter as the next few sections may not be relevant.</p>
-<h2 id="using-editline">Using Editline</h2>
-<p>The library <code>editline</code> provides two functions we are going to use called <code>readline</code> and <code>add_history</code>. This first function, <code>readline</code> is used to read input from some prompt, while allowing for editing of that input. The second function <code>add_history</code> lets us record the history of inputs so that they can be retrieved with the up and down arrows.</p>
-<p>We replace <code>fputs</code> and <code>fgets</code> with calls to these functions to get the following.</p>
+<p>用方向键会产生一些奇怪的字符: <code>^[[D</code> 或者 <code>^[[C</code>, 而不是在编辑区移动光标。我们真正想要的是，在我们弄错的情况下能够移动，删除和编辑输入。</p>
+<p>在 Windows 下这种行为是默认的。在 Linux 和 Mac 下这个功能由一个叫做 <code>editline</code> 的库。在 Linux 和 Mac 下我们用这个库提供的函数替换我们的 <code>fputs</code> 和 <code>fgets</code> 。</p>
+<p>如果你正在 Windows 下开发，而只是想要继续下去，那么可以跳到这一章的结尾，因为接下来的几节可能不相关。</p>
+<h2 id="-editline">使用 Editline</h2>
+<p><code>editline</code> 库 提供两个我们要用的函数，叫做 <code>readline</code> 和 <code>add_history</code>。第一个函数, <code>readline</code> 是用来从提示符读取输入的,但是它允许编辑输入。第二个韩式 <code>add_history</code> 让我们记录输入的历史一变我们可以通过上下键再次使用之前的输入。</p>
+<p>我们用这些函数取代了 <code>fputs</code> 和 <code>fgets</code> 得到了下面的代码</p>
 <pre><code class="lang-c"><span class="hljs-preprocessor">#include &lt;stdio.h&gt;</span>
 <span class="hljs-preprocessor">#include &lt;stdlib.h&gt;</span>
 
@@ -569,23 +569,23 @@ lispy&gt; hel^[[D^[[C
 
 <span class="hljs-keyword">int</span> main(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span>** argv) {
 
-  <span class="hljs-comment">/* Print Version and Exit Information */</span>
+  <span class="hljs-comment">/* 打印版本信息和退出信息 */</span>
   <span class="hljs-built_in">puts</span>(<span class="hljs-string">"Lispy Version 0.0.0.0.1"</span>);
   <span class="hljs-built_in">puts</span>(<span class="hljs-string">"Press Ctrl+c to Exit\n"</span>);
 
-  <span class="hljs-comment">/* In a never ending loop */</span>
+  <span class="hljs-comment">/* 无限循环 */</span>
   <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>) {
 
-    <span class="hljs-comment">/* Output our prompt and get input */</span>
+    <span class="hljs-comment">/* 输出提示符并得到输入 */</span>
     <span class="hljs-keyword">char</span>* input = readline(<span class="hljs-string">"lispy&gt; "</span>);
 
-    <span class="hljs-comment">/* Add input to history */</span>
+    <span class="hljs-comment">/* 将输入记录进历史 */</span>
     add_history(input);
 
-    <span class="hljs-comment">/* Echo input back to user */</span>
+    <span class="hljs-comment">/* 将输入反过来显示给用户 */</span>
     <span class="hljs-built_in">printf</span>(<span class="hljs-string">"No you're a %s\n"</span>, input);
 
-    <span class="hljs-comment">/* Free retrived input */</span>
+    <span class="hljs-comment">/* 释放 input */</span>
     <span class="hljs-built_in">free</span>(input);
 
   }
@@ -593,9 +593,9 @@ lispy&gt; hel^[[D^[[C
   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 }
 </code></pre>
-<p>We have <em>included</em> a few new <em>headers</em>. There is <code>#include &lt;stdlib.h&gt;</code>, which gives us access to the <code>free</code> function used later on in the code. We have also added <code>#include &lt;editline/readline.h&gt;</code> and <code>#include &lt;editline/history.h&gt;</code> which give us access to the <code>editline</code> functions, <code>readline</code> and <code>add_history</code>.</p>
-<p>Instead of prompting, and getting input with <code>fgets</code>, we do it in one go using <code>readline</code>. The result of this we pass to <code>add_history</code> to record it. Finally we print it out as before using <code>printf</code>.</p>
-<p>Unlike <code>fgets</code>, the <code>readline</code> function strips the trailing newline character from the input, so we need to add this to our <code>printf</code> function. We also need to delete the input given to us by the <code>readline</code> function using <code>free</code>. This is because unlike <code>fgets</code>, which writes to some existing buffer, the <code>readline</code> function allocates new memory when it is called. When to free memory is something we cover in depth in later chapters.</p>
+<p>我们 <em>included(包含)</em> 一些新的 <em>(头文件)headers</em>. 这里有 <code>#include &lt;stdlib.h&gt;</code>, 让我们可以使用 <code>free</code> 函数在代码的最后。我们还添加了 <code>#include &lt;editline/readline.h&gt;</code> 和 <code>#include &lt;editline/history.h&gt;</code> ，这让我们可以使用 <code>editline</code> , <code>r eadline</code> 和 <code>add_history</code> 三个函数。</p>
+<p>我们用一个 <code>readline</code> 取代了提示，并且用 <code>fgets</code> 来获得输入。我们将结果传递给 <code>add_history</code> 来记录它。 最后我们像之前一样使用 <code>printf</code> 来打印它。</p>
+<p>不像 <code>fgets</code>, <code>readline</code> 函数去掉了输入结尾的换行符，所以我们需要把换行符加到我们的 <code>printf</code> 函数中。我们还需要使用 <code>free</code> 来删除 <code>readline</code> 给我们的输入。因为它并不像 <code>fgets</code> 一样写入到一个已经存在的缓冲区，<code>readline</code> 函数被调用时申请新的空间。 When to free memory is something we cover in depth in later chapters.</p>
 <h2 id="compiling-with-editline">Compiling with Editline</h2>
 <p>If you try to compile this right away with the previous command you&#39;ll get an error. This is because you first need to install the <code>editline</code> library on your computer.</p>
 <pre><code>fatal error: editline/readline.h: No such file or directory #include &lt;editline/readline.h&gt;
@@ -841,6 +841,7 @@ int main(int argc, char** argv) {
   <li class="list-group-item">&rsaquo; If <code>_WIN32</code> is defined on windows, what is defined for Linux or Mac?</li>
 </ul>
 </div>
+
                     
                     </section>
                 
