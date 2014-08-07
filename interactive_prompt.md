@@ -1,45 +1,46 @@
-An Interactive Prompt
+交互式提示符(interactive prompt)
 =====================
 
 
-Read, Evaluate, Print
+读取，计算，打印(Read, Evaluate, Print)
 ---------------------
 
 ![reptile](img/reptile.png "Reptile &bull; Sort of like REPL")
 
-As we build our programming language we'll need some way to interact with it. C uses a compiler, where you can change the program, recompile and run it. It'd be good if we could do something better, and interact with the language dynamically. Then we test its behaviour under a number of conditions very quickly. For this we can built something called an *interactive prompt*.
 
-This is a program that prompts the user for some input, and when supplied with it, replies back with some message. Using this will be the easiest way to test our programming language and see how it acts. This system is also called a *REPL*, which stands for *read*-*evaluate*-*print* *loop*. It is a common way of interacting with a programming language which you may have used before in languages such as *Python*.
+既然我们打造我们自己的编程语言，我们需要和它交互的方法。C语言使用了一个编译器，所以你可以修改程序，重新编译然后运行它。如果我们能做的更好并且能够动态的和编程语言交互那就更棒了。然后我们就很快的在若干条件下测试它的特性。为了做到这一点我们要构造一个叫做*交互式提示符(interactive prompt)*的东西。
 
-Before building a full *REPL* we'll start with something simpler. We are going to make a system that prompts the user, and echoes any input straight back. If we make this we can later extend it to parse the user input and evaluate it, as if it were an actual Lisp program.
+这是一个程序，它可以提示用户输入，并且得到输入后返回一些信息。用这个是测试我们编程语言的最简单的方法。这种系统也叫 *REPL*, 代笔 *read(读)*-*evaluate(计算)*-*print(打印)* *loop(循环)*。这是常用的一种和编程语言交互的方法，你可能在例如 *Python* 的其他语言里使用过。
+
+在建立一个完整的 *REPL* 之前我们将从一些简单的事情开始。我们将构造一个系统，它可以提示用户，并且直接将输入返回给用户。 如果我们做到这一点，我们以后就可以扩展它来解析用户输入并计算，就像一个实际的 Lisp 程序一样。
 
 
-An Interactive Prompt
+一个交互式终端
 ---------------------
 
-For the basic setup we want to write a loop which repeatedly writes out a message, and then waits for some input. To get user input we can use a function called `fgets`, which reads any input up until a newline. We need somewhere to store this user input. For this we can declare a constantly sized input buffer.
+为了一个基本的体系，我们将要写一个循环，它反复的写出消息，然后等待输入。为了获取用户的输入我们可以用一个叫 `fget` 的函数，它读取输入直到遇到换行符。我们需要找一个地方来存储用户输入。为了这一点我们可以声明一个不变大小的输入缓冲区(buffer)。 
 
-Once we have this user input stored we can then print it back to the user using a function called `printf`.
+一旦我们存储了用户的输入后就可以把它输出给用户，这要用到一个叫做 `printf` 函数。
 
 ```c
 #include <stdio.h>
 
-/* Declare a static buffer for user input of maximum size 2048 */
+/* 声明一个静态缓冲区，允许用户最大的大小为2048的输入 */
 static char input[2048];
 
 int main(int argc, char** argv) {
 
-  /* Print Version and Exit Information */
+  /* 输出版本和退出信息 */
   puts("Lispy Version 0.0.0.0.1");
   puts("Press Ctrl+c to Exit\n");
 
-  /* In a never ending loop */
+  /* 一个永远不会停下的循环 */
   while (1) {
 
-    /* Output our prompt */
+    /* 输出提示 */
     fputs("lispy> ", stdout);
 
-    /* Read a line of user input of maximum size 2048 */
+    /* 读取一行用户的输入，最大大小2048 */
     fgets(input, 2048, stdin);
 
     /* Echo input back to user */
@@ -51,42 +52,42 @@ int main(int argc, char** argv) {
 ```
 
 <div class="alert alert-warning">
-  **What is that text in light gray?**
+  **这个灰色的文本是什么?**
 
-  The above code contains *comments*. These are sections of the code between `/*` `*/` symbols, which are ignored by the compiler, but are used to inform the person reading what is going on. Take notice of them!
+  上面包含*注释*的代码。它们是在符号 `/*` 和 `*/` 之间的部分, 注释会被编译器忽略，但是被用于告诉阅读这段代码的人到底是怎么回事。注意它们！
 </div>
 
-Lets go over this program in a little more depth.
+让我们深入的复习一下这个程序。
 
-The line `static char input[2048];` declares a global array of 2048 characters. This is a reserved block of data we can access anywhere from our program. In it we are going to store the user input which is typed into the command line. The `static` keyword make this variable local to this file, and the `[2048]` section is what declares the size.
+`static char input[2048];` 这一行声明了一个公有的2048个字符数组。这是一个保留的数据块，我们可以在程序的任何地方使用它。我们将要把用户在命令行里的输入存储到里面。`static` 这个关键词(keyword)让这个变量属于这个文件局部，并且 `[2048]` 这个部分声明了它的大小。
 
-We write an infinite loop using `while (1)`. In a conditional block `1` always evaluates to true. Therefore commands inside this loop will run forever.
+我们用 `while (1)` 写了一个无限循环。条件块 1 总是等同于 true(真)。因此循环里的命令将会永远运行。
 
-To output our prompt we use the function `fputs`. This is a slight variation on `puts` which does not append a newline character. We use the `fgets` function for getting user input from the command line. Both of these functions require some file to write to, or read from. For this we supply the special variables `stdin` and `stdout`. These are declared in `<stdio.h>` and are special file variables representing input to, and output from, the command line. When passed this variable the `fgets` function will wait for a user to input a line of text, and when it has it will store it into the `input` buffer, including the newline character. So that `fgets` does not read in too much data we also must supply the size of the buffer `2048`.
+为了在我们使用函数 `fputs` 时能够输出我们的提示。这和 `puts` 略有不同，它并不尾部追加一个换行符。我们用 `fgets` 函数来获取用户在命令行的输入。这两个函数需要一些文件来读写。为了这一点我们提供了两个特殊的变量 `stdin` 和 `stdout`。它们被声明在 `<stdio.h>` 里，而且是特殊的文件变量，代表着从命令行的输入输出。当传递这个变量的时候函数 `fputs`将会等待用户输入一行文本，得到输入后便将它存储在 `input` 里，包括换行符。所以 `fgets` 并不会读取太多数据，我们提供一个大小为2048的缓冲区便足够了。
 
-To echo the message back to the user we use the function `printf`. This is a function that provides a way of printing messages consisting of several elements. It matches arguments to patterns in the given string. For example in our case we can see the `%s` pattern in the given string. This means that it will be replaced by whatever argument is passed in next, interpreted as a string.
+为了将消息显示给用户我们需要用到函数 `printf`。这个函数提供了一个方法可以打印由不同元素组成的信息。它按照给定的格式字符串来匹配参数。例如在我们的例子中我们在格式字符串里可以看到 `%s`。这意味着它将被接下来传递的参数替代，解释为一个字符串。
 
-For more information on these different patterns please see the [documentation](http://en.cppreference.com/w/c/io/printf) on `printf`.
+关于更多关于 `printf` 的不同格式字符串的信息请看 [documentation](http://en.cppreference.com/w/c/io/printf)
 
 <div class="alert alert-warning">
-  **How am I meant to know about functions like `fgets` and `printf`?**
+  **我如何了解像 `fgets` 和 `printf`这样的函数呢?**
 
-  It isn't immediately obvious how to know about these standard functions, and when to use them. When faced with a problem it takes experience to know when it has been solved for you by library functions.
+  如何了解这些标准函数，以及什么时候使用它们并不是显而易见的。当面对一个问题时知道有什么已经解决了您的问题的库函数是需要经验的。
 
-  Luckily C has a very small standard library and almost all of it can be learnt in practice. If you want to do something that seems quite basic, or fundamental, it is worth looking at the [reference documentation](http://en.cppreference.com/w/c) for the standard library and checking if there are any functions included that do what you want.
+  幸运的是C语言有一个非常小的标准库而且它们中的大部分可以在练习中被学习。如果你想做一些基础或者根本的事情，那你值得看一看标准库的[参考文档](http://en.cppreference.com/w/c)，并检查这里是否有你想要的函数。
 </div>
 
 
-Compilation
+编译
 -----------
 
-You can compile this with the same command as was used in the second chapter.
+你可以使用和第二章中一样的命令编译
 
 ```shell
 cc -std=c99 -Wall prompt.c -o prompt
 ```
 
-After compiling this you should try to run it. You can use `Ctrl+c` to quit the program when you are done. If everything is correct your program should run something like this.
+在编译后你可以试着运行它。但你完成的时候你可以使用 `Ctrl+c` 来退出程序。如果一切都正确的话你应该可以像这样运行你的程序
 
 ```lispy
 Lispy Version 0.0.0.0.1
@@ -102,10 +103,10 @@ lispy>
 ```
 
 
-Editing input
+编辑输入
 -------------
 
-If you're working on Linux or Mac you'll notice some weird behaviour when you use the arrow keys to attempt to edit your input.
+如果你正在 Linux 或者是 Mac 下工作你将会发现在你输入时使用方向键时有一些奇怪的表现。
 
 ```lispy
 Lispy Version 0.0.0.0.3
@@ -114,18 +115,18 @@ Press Ctrl+c to Exit
 lispy> hel^[[D^[[C
 ```
 
-Using the arrow keys is creating these weird characters `^[[D` or `^[[C`, rather than moving the cursor around in the input. What we really want is to be able to move around on the line, deleting and editing the input in case we make a mistake.
+用方向键会产生一些奇怪的字符: `^[[D` 或者 `^[[C`, 而不是在编辑区移动光标。我们真正想要的是，在我们弄错的情况下能够移动，删除和编辑输入。
 
-On Windows this behaviour is the default. On Linux and Mac it is provided by a library called `editline`. On Linux and Mac we need to replace our calls to `fputs` and `fgets` with calls to functions this library provides.
+在 Windows 下这种行为是默认的。在 Linux 和 Mac 下这个功能由一个叫做 `editline` 的库。在 Linux 和 Mac 下我们用这个库提供的函数替换我们的 `fputs` 和 `fgets` 。
 
-If you're developing on Windows and just want to get going, feel free to skip to the end of this chapter as the next few sections may not be relevant.
+如果你正在 Windows 下开发，而只是想要继续下去，那么可以跳到这一章的结尾，因为接下来的几节可能不相关。
 
-Using Editline
+使用 Editline
 --------------
 
-The library `editline` provides two functions we are going to use called `readline` and `add_history`. This first function, `readline` is used to read input from some prompt, while allowing for editing of that input. The second function `add_history` lets us record the history of inputs so that they can be retrieved with the up and down arrows.
+`editline` 库 提供两个我们要用的函数，叫做 `readline` 和 `add_history`。第一个函数, `readline` 是用来从提示符读取输入的,但是它允许编辑输入。第二个韩式 `add_history` 让我们记录输入的历史一变我们可以通过上下键再次使用之前的输入。
 
-We replace `fputs` and `fgets` with calls to these functions to get the following.
+我们用这些函数取代了 `fputs` 和 `fgets` 得到了下面的代码
 
 ```c
 #include <stdio.h>
@@ -136,23 +137,23 @@ We replace `fputs` and `fgets` with calls to these functions to get the followin
 
 int main(int argc, char** argv) {
 
-  /* Print Version and Exit Information */
+  /* 打印版本信息和退出信息 */
   puts("Lispy Version 0.0.0.0.1");
   puts("Press Ctrl+c to Exit\n");
 
-  /* In a never ending loop */
+  /* 无限循环 */
   while (1) {
 
-    /* Output our prompt and get input */
+    /* 输出提示符并得到输入 */
     char* input = readline("lispy> ");
 
-    /* Add input to history */
+    /* 将输入记录进历史 */
     add_history(input);
 
-    /* Echo input back to user */
+    /* 将输入反过来显示给用户 */
     printf("No you're a %s\n", input);
 
-    /* Free retrived input */
+    /* 释放 input */
     free(input);
 
   }
@@ -162,11 +163,11 @@ int main(int argc, char** argv) {
 ```
 
 
-We have *included* a few new *headers*. There is `#include <stdlib.h>`, which gives us access to the `free` function used later on in the code. We have also added `#include <editline/readline.h>` and `#include <editline/history.h>` which give us access to the `editline` functions, `readline` and `add_history`.
+我们 *included(包含)* 一些新的 *(头文件)headers*. 这里有 `#include <stdlib.h>`, 让我们可以使用 `free` 函数在代码的最后。我们还添加了 `#include <editline/readline.h>` 和 `#include <editline/history.h>` ，这让我们可以使用 `editline` , `r eadline` 和 `add_history` 三个函数。
 
-Instead of prompting, and getting input with `fgets`, we do it in one go using `readline`. The result of this we pass to `add_history` to record it. Finally we print it out as before using `printf`.
+我们用一个 `readline` 取代了提示，并且用 `fgets` 来获得输入。我们将结果传递给 `add_history` 来记录它。 最后我们像之前一样使用 `printf` 来打印它。
 
-Unlike `fgets`, the `readline` function strips the trailing newline character from the input, so we need to add this to our `printf` function. We also need to delete the input given to us by the `readline` function using `free`. This is because unlike `fgets`, which writes to some existing buffer, the `readline` function allocates new memory when it is called. When to free memory is something we cover in depth in later chapters.
+不像 `fgets`, `readline` 函数去掉了输入结尾的换行符，所以我们需要把换行符加到我们的 `printf` 函数中。我们还需要使用 `free` 来删除 `readline` 给我们的输入。因为它并不像 `fgets` 一样写入到一个已经存在的缓冲区，`readline` 函数被调用时申请新的空间。 When to free memory is something we cover in depth in later chapters.
 
 Compiling with Editline
 -----------------------
