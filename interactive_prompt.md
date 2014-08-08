@@ -167,73 +167,71 @@ int main(int argc, char** argv) {
 
 我们用一个 `readline` 取代了提示，并且用 `fgets` 来获得输入。我们将结果传递给 `add_history` 来记录它。 最后我们像之前一样使用 `printf` 来打印它。
 
-不像 `fgets`, `readline` 函数去掉了输入结尾的换行符，所以我们需要把换行符加到我们的 `printf` 函数中。我们还需要使用 `free` 来删除 `readline` 给我们的输入。因为它并不像 `fgets` 一样写入到一个已经存在的缓冲区，`readline` 函数被调用时申请新的空间。 When to free memory is something we cover in depth in later chapters.
+不像 `fgets`, `readline` 函数去掉了输入结尾的换行符，所以我们需要把换行符加到我们的 `printf` 函数中。我们还需要使用 `free` 来删除 `readline` 给我们的输入。因为它并不像 `fgets` 一样写入到一个已经存在的缓冲区，`readline` 函数被调用时申请新的空间。关于释放内存我们将会在后面的章节深入讨论。
 
-Compiling with Editline
+和 Editline 一起编译
 -----------------------
-
-If you try to compile this right away with the previous command you'll get an error. This is because you first need to install the `editline` library on your computer.
-
+如果你尝试用之前的命令马上编译它你会得到一个错误。这是因为你首先需要在你的电脑上安装 `editorline` 库。
 
 ```
 fatal error: editline/readline.h: No such file or directory #include <editline/readline.h>
 ```
 
-On **Linux** this can be done using the command `sudo apt-get install libedit-dev`. On Fedora or similar you can use the command `su -c "yum install libedit-dev*"`
+在 **Linux** 上这可以用命令 `sudo apt-get install libedit-dev`完成。在 Fedora 或者相似的系统我们可以使用命令 `su -c "yum install libedit-dev*"`
 
-On **Mac** the `editline` library should have been installed alongside the *Command Line Tools*. If you get an error about the history header not being found you can either try removing that line of code or installing the `readline` library, which can be used as a drop-in replacement. This can be installed using Homebrew or MacPorts.
+在 **Mac** 上 `editline` 库应该在 *Command Line Tools(命令行工具)* 旁边。 如果你得到一个有关头文件未找到的错误。你可以试着删除这一行代码或者安装 `readline` 库来作为替代。它可以用 Homebrew 或者 MacPorts 来安装。
 
-Once you have installed this you can try to compile it again. This time you'll get a different error.
+一旦你安装了它你可以尝试重新编译。这次你会得到一个不同的错误。
 
 ```
 undefined reference to `readline'
 undefined reference to `add_history'
 ```
 
-This means that you haven't *linked* your program to `editline`. This *linking* process allows the compiler to directly embed calls to `editline` in your program. You can make it link by adding the flag `-ledit` to your compile command, just before the output flag.
+这代表你没有 *(连接)linked* 你的程序和 `editline`。*连接* 过程允许编译器直接将对 `editline` 的调用嵌入你的程序。你可以在你的编译命令里加上 `-ledit` 标记让它连接，只要标记在 output 标记(-o)前。
 
 ```shell
 cc -std=c99 -Wall prompt.c -ledit -o prompt
 ```
-
-Hopefully now you should be able to *compile* and *link* your program with `editline`. Run it and check that now you can edit inputs as you type them in.
+希望你现在应该能够*编译*你的程序并*连接*它和 `editline`。运行并检查你现在是否可以在输入的时候编辑。
 
 <div class="alert alert-warning">
-  **It's still not working!**
+  **它仍然不能工作!**
 
-  Some systems might have slight variations on how to install, include, and link to `editline`. For example on Mac and some other systems the history header may not be required and so that line of code can be removed. On Arch linux the editline history header is `histedit.h`. If you are having trouble search online and see if you can find distribution specific instructions on how to use `editline` or `readline`, an equivalent library.
+  一些系统在如何安装，包含，和连接 `editline` 可能会有所不同。例如在 Mac 和一些其他系统 history 头文件可能不是必需的所以这一行代码就可以移除。 在 Arch linux 上 editline history 头文件是 `histedit.h`。如果你遇到问题可以在网上搜索并且可以看看你能不能找到特定发行版关于如何使用 `editline` 和 `readline` 的说明， 这是一个等价的库。
 </div>
 
 
-The C Preprocessor
+C语言的预处理器
 ------------------
 
-For such a small project it might be okay that we have to program differently depending on what operating system we are using, but if I want to send my source code to a friend on different operating system to give me a hand with the programming, it is going to cause problem. In an ideal world I'd wish for my source code to be able to compile no matter where, or on what computer, it is being compiled. This is a general problem in C, and it is called *portability*. There is not always an easy or correct solution.
+对于一个小工程来说，根据不同的系统写不同的代码可能没有关系 ，但是如果我想把我的源代码发给一个正在用不同操作系统的朋友，让他来协助这个工程，那可能就会引发问题。在一个理想的世界我希望我的源代码能够在任何一个地方或电脑编译。这是C语言中一个常见的问题，它叫做可移植性 。不会总是有一个简单或正确的方案。
 
 ![octopus](img/octopus.png "Octopus &bull; Sort of like Octothorpe")
 
-But C does provide a mechanism to help, called *the preprocessor*.
+但是 C 提供了一个机制来帮忙，叫做*预处理器*。
 
-The preprocessor is a program that runs before the compiler. It has a number of purposes, and we've been actually using it already without knowing. Any line that starts with a octothorpe `#` character (hash to you and me) is a preprocessor command. We've been using it to *include* header files, giving us access to functions from the standard library and others.
+预处理器是一个在编译器之前运行的程序。它有许多我们已经使用确不知到的目的。任何有井号 `#` 的一行都是一个预处理器命令。我们曾经用它来 *(包含)include* 头文件, 这让我们可以使用标准库和其他库的函数。
 
-Another use of the preprocessor is to detect which operating system the code is being compiled on, and to use this to emit different code.
+预处理器的另外一个作用是监测代码正在什么系统下被编译，并且据此使用不同的代码。
 
-This is exactly how we are going to use it. If we are running Windows we're going to let the preprocessor emit code with some fake `readline` and `add_history` functions I've prepared, otherwise we are going to include the headers from `editline` and use these.
+这恰好是我们要用的。如果我们正在运行 Windows 我们就要让预处理器使用一些我准备的装作是 `readline` 和 `add_history` 函数的代码, 否则我们就包含 `editline` 的头文件并且使用他们。
 
-To declare what code the compiler should emit we can wrap it in `#ifdef`, `#else`, and `#endif` preprocessor statements. These are like an `if` function that happens before the code is compiled. All the contents of the file from the first `#ifdef` to the next `#else` are used if the condition is true, otherwise all the contents from the `#else` to the final `#endif` are used instead. By putting these around our fake functions, and our editline headers, the code that is emitted should compile on Windows, Linux or Mac!
+为了声明什么代码是编译器应该使用的我们可以把他们写在 `#ifdef`, `#else`, 和 `#endif` 包含的预处理语句。就像一个在代码被编译前的 `if`。 文件中从第一个 `#ifdef` 到下一个 `#else` 的内容在条件成立的情况下被使用，否则就使用 `#else` 到最后 `#endif` 的内容取代。通过把这些放到我们伪装的函数和editline 头周围，这段代码就可以在Windows, Linux 或者 Mac 下编译。
+
 
 ```c
 #include <stdio.h>
 #include <stdlib.h>
 
-/* If we are compiling on Windows compile these functions */
+/* 如果我们正在 Windows 下编译则编译这个函数 */
 #ifdef _WIN32
 
 #include <string.h>
 
 static char buffer[2048];
 
-/* Fake readline function */
+/* 伪装的 readline 函数 */
 char* readline(char* prompt) {
   fputs(prompt, stdout);
   fgets(buffer, 2048, stdin);
@@ -243,10 +241,10 @@ char* readline(char* prompt) {
   return cpy;
 }
 
-/* Fake add_history function */
+/* 伪装 add_history function */
 void add_history(char* unused) {}
 
-/* Otherwise include the editline headers */
+/* 否则包含 editline 头 */
 #else
 
 #include <editline/readline.h>
@@ -261,7 +259,7 @@ int main(int argc, char** argv) {
 
   while (1) {
 
-    /* Now in either case readline will be correctly defined */
+    /* 现在任何情况下 readline 函数都被正确的定义了 */
     char* input = readline("lispy> ");
     add_history(input);
 
@@ -275,7 +273,7 @@ int main(int argc, char** argv) {
 ```
 
 
-Reference
+参考
 ---------
 
 <div class="panel-group alert alert-warning" id="accordion">
@@ -436,7 +434,7 @@ int main(int argc, char** argv) {
 </div>
 
 
-Bonus Marks
+附加题
 -----------
 
 <div class="alert alert-warning">
