@@ -439,14 +439,14 @@ int main(int argc, char** argv) {
 
 <div class="alert alert-warning">
 <ul class="list-group">
-  <li class="list-group-item">&rsaquo; Change the prompt from `lispy>` to something of your choice.</li>
-  <li class="list-group-item">&rsaquo; Change what is echoed back to the user.</li>
-  <li class="list-group-item">&rsaquo; Add an extra message to the *Version* and *Exit* Information.</li>
-  <li class="list-group-item">&rsaquo; What does the `\n` mean in those strings?</li>
-  <li class="list-group-item">&rsaquo; What other patterns can be used with `printf`.</li>
-  <li class="list-group-item">&rsaquo; What happens when you pass `printf` a variable does not match the pattern?</li>
-  <li class="list-group-item">&rsaquo; What does the preprocessor command `#ifndef` do?</li>
-  <li class="list-group-item">&rsaquo; What does the preprocessor command `#define` do?</li>
-  <li class="list-group-item">&rsaquo; If `_WIN32` is defined on windows, what is defined for Linux or Mac?</li>
+  <li class="list-group-item">&rsaquo; 将提示符从 `lispy>` 修改成你自己的选择。</li>
+  <li class="list-group-item">&rsaquo; 改变显示给同户的回复。</li>
+  <li class="list-group-item">&rsaquo; 向 *版本* 和 *退出* 添加额外信息。</li>
+  <li class="list-group-item">&rsaquo; `\n` 在字符串中代表什么意思?</li>
+  <li class="list-group-item">&rsaquo; 在 `printf` 中还可以用哪些其他的格式化字符串。</li>
+  <li class="list-group-item">&rsaquo; 当你向 `printf` 传递和格式化字符串不匹配的变量时会发生什么?</li>
+  <li class="list-group-item">&rsaquo; 预处理命令 `#ifndef` 是干什么的?</li>
+  <li class="list-group-item">&rsaquo; 预处理命令 `#define` 是干什么的?</li>
+  <li class="list-group-item">&rsaquo; 如果 `_WIN32` 在 windows 上被定义,Linux or Mac 有什么呢?</li>
 </ul>
 </div>
