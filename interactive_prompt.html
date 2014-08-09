@@ -7,7 +7,7 @@
         <title>Interactive Prompt | 介绍</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
-        <meta name="generator" content="GitBook 0.7.0">
+        <meta name="generator" content="GitBook 0.7.1">
         <meta name="HandheldFriendly" content="true"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
         <meta name="apple-mobile-web-app-capable" content="yes">
@@ -34,7 +34,7 @@
 
 
         
-    <div class="book" data-github="CodeFalling/BuildYourOwnLispGitbookCN" data-level="3" data-basepath="." data-revision="1407420421841">
+    <div class="book" data-github="CodeFalling/BuildYourOwnLispGitbookCN" data-level="3" data-basepath="." data-revision="1407550346258">
     <div class="book-header">
     <!-- Actions Left -->
     <a href="#" class="btn pull-left toggle-summary" aria-label="Toggle summary"><i class="fa fa-align-justify"></i></a>
@@ -595,45 +595,45 @@ lispy&gt; hel^[[D^[[C
 </code></pre>
 <p>我们 <em>included(包含)</em> 一些新的 <em>(头文件)headers</em>. 这里有 <code>#include &lt;stdlib.h&gt;</code>, 让我们可以使用 <code>free</code> 函数在代码的最后。我们还添加了 <code>#include &lt;editline/readline.h&gt;</code> 和 <code>#include &lt;editline/history.h&gt;</code> ，这让我们可以使用 <code>editline</code> , <code>r eadline</code> 和 <code>add_history</code> 三个函数。</p>
 <p>我们用一个 <code>readline</code> 取代了提示，并且用 <code>fgets</code> 来获得输入。我们将结果传递给 <code>add_history</code> 来记录它。 最后我们像之前一样使用 <code>printf</code> 来打印它。</p>
-<p>不像 <code>fgets</code>, <code>readline</code> 函数去掉了输入结尾的换行符，所以我们需要把换行符加到我们的 <code>printf</code> 函数中。我们还需要使用 <code>free</code> 来删除 <code>readline</code> 给我们的输入。因为它并不像 <code>fgets</code> 一样写入到一个已经存在的缓冲区，<code>readline</code> 函数被调用时申请新的空间。 When to free memory is something we cover in depth in later chapters.</p>
-<h2 id="compiling-with-editline">Compiling with Editline</h2>
-<p>If you try to compile this right away with the previous command you&#39;ll get an error. This is because you first need to install the <code>editline</code> library on your computer.</p>
+<p>不像 <code>fgets</code>, <code>readline</code> 函数去掉了输入结尾的换行符，所以我们需要把换行符加到我们的 <code>printf</code> 函数中。我们还需要使用 <code>free</code> 来删除 <code>readline</code> 给我们的输入。因为它并不像 <code>fgets</code> 一样写入到一个已经存在的缓冲区，<code>readline</code> 函数被调用时申请新的空间。关于释放内存我们将会在后面的章节深入讨论。</p>
+<h2 id="-editline-">和 Editline 一起编译</h2>
+<p>如果你尝试用之前的命令马上编译它你会得到一个错误。这是因为你首先需要在你的电脑上安装 <code>editorline</code> 库。</p>
 <pre><code>fatal error: editline/readline.h: No such file or directory #include &lt;editline/readline.h&gt;
-</code></pre><p>On <strong>Linux</strong> this can be done using the command <code>sudo apt-get install libedit-dev</code>. On Fedora or similar you can use the command <code>su -c &quot;yum install libedit-dev*&quot;</code></p>
-<p>On <strong>Mac</strong> the <code>editline</code> library should have been installed alongside the <em>Command Line Tools</em>. If you get an error about the history header not being found you can either try removing that line of code or installing the <code>readline</code> library, which can be used as a drop-in replacement. This can be installed using Homebrew or MacPorts.</p>
-<p>Once you have installed this you can try to compile it again. This time you&#39;ll get a different error.</p>
+</code></pre><p>在 <strong>Linux</strong> 上这可以用命令 <code>sudo apt-get install libedit-dev</code>完成。在 Fedora 或者相似的系统我们可以使用命令 <code>su -c &quot;yum install libedit-dev*&quot;</code></p>
+<p>在 <strong>Mac</strong> 上 <code>editline</code> 库应该在 <em>Command Line Tools(命令行工具)</em> 旁边。 如果你得到一个有关头文件未找到的错误。你可以试着删除这一行代码或者安装 <code>readline</code> 库来作为替代。它可以用 Homebrew 或者 MacPorts 来安装。</p>
+<p>一旦你安装了它你可以尝试重新编译。这次你会得到一个不同的错误。</p>
 <pre><code>undefined reference to `readline&#39;
 undefined reference to `add_history&#39;
-</code></pre><p>This means that you haven&#39;t <em>linked</em> your program to <code>editline</code>. This <em>linking</em> process allows the compiler to directly embed calls to <code>editline</code> in your program. You can make it link by adding the flag <code>-ledit</code> to your compile command, just before the output flag.</p>
+</code></pre><p>这代表你没有 <em>(连接)linked</em> 你的程序和 <code>editline</code>。<em>连接</em> 过程允许编译器直接将对 <code>editline</code> 的调用嵌入你的程序。你可以在你的编译命令里加上 <code>-ledit</code> 标记让它连接，只要标记在 output 标记(-o)前。</p>
 <pre><code class="lang-shell">cc -std=c99 -Wall prompt.c -ledit -o prompt
 </code></pre>
-<p>Hopefully now you should be able to <em>compile</em> and <em>link</em> your program with <code>editline</code>. Run it and check that now you can edit inputs as you type them in.</p>
+<p>希望你现在应该能够<em>编译</em>你的程序并<em>连接</em>它和 <code>editline</code>。运行并检查你现在是否可以在输入的时候编辑。</p>
 <div class="alert alert-warning">
-  <strong>It&#39;s still not working!</strong>
+  <strong>它仍然不能工作!</strong>
 
-  Some systems might have slight variations on how to install, include, and link to <code>editline</code>. For example on Mac and some other systems the history header may not be required and so that line of code can be removed. On Arch linux the editline history header is <code>histedit.h</code>. If you are having trouble search online and see if you can find distribution specific instructions on how to use <code>editline</code> or <code>readline</code>, an equivalent library.
+  一些系统在如何安装，包含，和连接 <code>editline</code> 可能会有所不同。例如在 Mac 和一些其他系统 history 头文件可能不是必需的所以这一行代码就可以移除。 在 Arch linux 上 editline history 头文件是 <code>histedit.h</code>。如果你遇到问题可以在网上搜索并且可以看看你能不能找到特定发行版关于如何使用 <code>editline</code> 和 <code>readline</code> 的说明， 这是一个等价的库。
 </div>
 
 
-<h2 id="the-c-preprocessor">The C Preprocessor</h2>
-<p>For such a small project it might be okay that we have to program differently depending on what operating system we are using, but if I want to send my source code to a friend on different operating system to give me a hand with the programming, it is going to cause problem. In an ideal world I&#39;d wish for my source code to be able to compile no matter where, or on what computer, it is being compiled. This is a general problem in C, and it is called <em>portability</em>. There is not always an easy or correct solution.</p>
+<h2 id="c">C语言的预处理器</h2>
+<p>对于一个小工程来说，根据不同的系统写不同的代码可能没有关系 ，但是如果我想把我的源代码发给一个正在用不同操作系统的朋友，让他来协助这个工程，那可能就会引发问题。在一个理想的世界我希望我的源代码能够在任何一个地方或电脑编译。这是C语言中一个常见的问题，它叫做可移植性 。不会总是有一个简单或正确的方案。</p>
 <p><img src="img/octopus.png" alt="octopus" title="Octopus &bull; Sort of like Octothorpe"></p>
-<p>But C does provide a mechanism to help, called <em>the preprocessor</em>.</p>
-<p>The preprocessor is a program that runs before the compiler. It has a number of purposes, and we&#39;ve been actually using it already without knowing. Any line that starts with a octothorpe <code>#</code> character (hash to you and me) is a preprocessor command. We&#39;ve been using it to <em>include</em> header files, giving us access to functions from the standard library and others.</p>
-<p>Another use of the preprocessor is to detect which operating system the code is being compiled on, and to use this to emit different code.</p>
-<p>This is exactly how we are going to use it. If we are running Windows we&#39;re going to let the preprocessor emit code with some fake <code>readline</code> and <code>add_history</code> functions I&#39;ve prepared, otherwise we are going to include the headers from <code>editline</code> and use these.</p>
-<p>To declare what code the compiler should emit we can wrap it in <code>#ifdef</code>, <code>#else</code>, and <code>#endif</code> preprocessor statements. These are like an <code>if</code> function that happens before the code is compiled. All the contents of the file from the first <code>#ifdef</code> to the next <code>#else</code> are used if the condition is true, otherwise all the contents from the <code>#else</code> to the final <code>#endif</code> are used instead. By putting these around our fake functions, and our editline headers, the code that is emitted should compile on Windows, Linux or Mac!</p>
+<p>但是 C 提供了一个机制来帮忙，叫做<em>预处理器</em>。</p>
+<p>预处理器是一个在编译器之前运行的程序。它有许多我们已经使用确不知到的目的。任何有井号 <code>#</code> 的一行都是一个预处理器命令。我们曾经用它来 <em>(包含)include</em> 头文件, 这让我们可以使用标准库和其他库的函数。</p>
+<p>预处理器的另外一个作用是监测代码正在什么系统下被编译，并且据此使用不同的代码。</p>
+<p>这恰好是我们要用的。如果我们正在运行 Windows 我们就要让预处理器使用一些我准备的装作是 <code>readline</code> 和 <code>add_history</code> 函数的代码, 否则我们就包含 <code>editline</code> 的头文件并且使用他们。</p>
+<p>为了声明什么代码是编译器应该使用的我们可以把他们写在 <code>#ifdef</code>, <code>#else</code>, 和 <code>#endif</code> 包含的预处理语句。就像一个在代码被编译前的 <code>if</code>。 文件中从第一个 <code>#ifdef</code> 到下一个 <code>#else</code> 的内容在条件成立的情况下被使用，否则就使用 <code>#else</code> 到最后 <code>#endif</code> 的内容取代。通过把这些放到我们伪装的函数和editline 头周围，这段代码就可以在Windows, Linux 或者 Mac 下编译。</p>
 <pre><code class="lang-c"><span class="hljs-preprocessor">#include &lt;stdio.h&gt;</span>
 <span class="hljs-preprocessor">#include &lt;stdlib.h&gt;</span>
 
-<span class="hljs-comment">/* If we are compiling on Windows compile these functions */</span>
+<span class="hljs-comment">/* 如果我们正在 Windows 下编译则编译这个函数 */</span>
 <span class="hljs-preprocessor">#ifdef _WIN32</span>
 
 <span class="hljs-preprocessor">#include &lt;string.h&gt;</span>
 
 <span class="hljs-keyword">static</span> <span class="hljs-keyword">char</span> buffer[<span class="hljs-number">2048</span>];
 
-<span class="hljs-comment">/* Fake readline function */</span>
+<span class="hljs-comment">/* 伪装的 readline 函数 */</span>
 <span class="hljs-keyword">char</span>* readline(<span class="hljs-keyword">char</span>* prompt) {
   <span class="hljs-built_in">fputs</span>(prompt, stdout);
   fgets(buffer, <span class="hljs-number">2048</span>, stdin);
@@ -643,10 +643,10 @@ undefined reference to `add_history&#39;
   <span class="hljs-keyword">return</span> cpy;
 }
 
-<span class="hljs-comment">/* Fake add_history function */</span>
+<span class="hljs-comment">/* 伪装 add_history function */</span>
 <span class="hljs-keyword">void</span> add_history(<span class="hljs-keyword">char</span>* unused) {}
 
-<span class="hljs-comment">/* Otherwise include the editline headers */</span>
+<span class="hljs-comment">/* 否则包含 editline 头 */</span>
 <span class="hljs-preprocessor">#else</span>
 
 <span class="hljs-preprocessor">#include &lt;editline/readline.h&gt;</span>
@@ -661,7 +661,7 @@ undefined reference to `add_history&#39;
 
   <span class="hljs-keyword">while</span> (<span class="hljs-number">1</span>) {
 
-    <span class="hljs-comment">/* Now in either case readline will be correctly defined */</span>
+    <span class="hljs-comment">/* 现在任何情况下 readline 函数都被正确的定义了 */</span>
     <span class="hljs-keyword">char</span>* input = readline(<span class="hljs-string">"lispy&gt; "</span>);
     add_history(input);
 
@@ -673,7 +673,7 @@ undefined reference to `add_history&#39;
   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 }
 </code></pre>
-<h2 id="reference">Reference</h2>
+<h2 id="">参考</h2>
 <div class="panel-group alert alert-warning" id="accordion">
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -827,18 +827,18 @@ int main(int argc, char** argv) {
   </div>
 
 <p></div></p>
-<h2 id="bonus-marks">Bonus Marks</h2>
+<h2 id="">附加题</h2>
 <div class="alert alert-warning">
 <ul class="list-group">
-  <li class="list-group-item">&rsaquo; Change the prompt from <code>lispy&gt;</code> to something of your choice.</li>
-  <li class="list-group-item">&rsaquo; Change what is echoed back to the user.</li>
-  <li class="list-group-item">&rsaquo; Add an extra message to the <em>Version</em> and <em>Exit</em> Information.</li>
-  <li class="list-group-item">&rsaquo; What does the <code>\n</code> mean in those strings?</li>
-  <li class="list-group-item">&rsaquo; What other patterns can be used with <code>printf</code>.</li>
-  <li class="list-group-item">&rsaquo; What happens when you pass <code>printf</code> a variable does not match the pattern?</li>
-  <li class="list-group-item">&rsaquo; What does the preprocessor command <code>#ifndef</code> do?</li>
-  <li class="list-group-item">&rsaquo; What does the preprocessor command <code>#define</code> do?</li>
-  <li class="list-group-item">&rsaquo; If <code>_WIN32</code> is defined on windows, what is defined for Linux or Mac?</li>
+  <li class="list-group-item">&rsaquo; 将提示符从 <code>lispy&gt;</code> 修改成你自己的选择。</li>
+  <li class="list-group-item">&rsaquo; 改变显示给同户的回复。</li>
+  <li class="list-group-item">&rsaquo; 向 <em>版本</em> 和 <em>退出</em> 添加额外信息。</li>
+  <li class="list-group-item">&rsaquo; <code>\n</code> 在字符串中代表什么意思?</li>
+  <li class="list-group-item">&rsaquo; 在 <code>printf</code> 中还可以用哪些其他的格式化字符串。</li>
+  <li class="list-group-item">&rsaquo; 当你向 <code>printf</code> 传递和格式化字符串不匹配的变量时会发生什么?</li>
+  <li class="list-group-item">&rsaquo; 预处理命令 <code>#ifndef</code> 是干什么的?</li>
+  <li class="list-group-item">&rsaquo; 预处理命令 <code>#define</code> 是干什么的?</li>
+  <li class="list-group-item">&rsaquo; 如果 <code>_WIN32</code> 在 windows 上被定义,Linux or Mac 有什么呢?</li>
 </ul>
 </div>
 
