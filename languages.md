@@ -1,77 +1,77 @@
-Languages
+语言
 =========
 
 
-What is a Programming Language?
+什么是编程语言?
 -------------------------------
 
-A programming language is very similar to a real language. There is a structure behind it, and some rules which dictate what is, and isn't, a valid thing to say. When we read and write natural language, we are unconsciously learning these rules, and the same is true for programming languages. We can utilise these rules to understand others, and generate our own speech, or code.
+一个编程语言和真实的语言是很相似的。它背后有一个结构和一些规则。当我们阅读和书写自然语言时，我们不知不觉便学到了这些规则， 编程语言也是这样的。我们可以利用规则来理解他人，说话或者写出代码。
 
-In the 1950s the linguist *Noam Chomsky* formalised a number of [important observations](http://en.wikipedia.org/wiki/Chomsky_hierarchy) about languages. Many of these form the basis of our understanding of language today. One of these was the observation that natural languages are built up of recursive and repeated substructures.
+20世纪50年代语言学家 *Noam Chomsky* 形式化了大量关于语言的 [重要观察](http://en.wikipedia.org/wiki/Chomsky_hierarchy)。这些中的许多构成了我们今天的语言理解的基础。其中的一个就是观察自然语言的递归建立了递归和重复的子结构。
 
 ![cat](img/cat.png "Cat &bull; cannot speak or program")
 
-As an example of this, we can examine the phrase.
+作为一个例子，我们可以看看下面这个短语。
 
 &rsaquo; `The cat walked on the carpet.`
 
-Using the rules of English, the noun `cat` can be replaced by two nouns separated by `and`.
+用英语的规则，名词 `cat` 可以被两个由 `and` 连接的名词替代。
 
 &rsaquo; <code>The <strong>cat and dog</strong> walked on the carpet.</code>
 
-Each of these new nouns could in turn be replaced again. We could use the same rule as before, and replace `cat` with two new nouns joined with `and`. Or we could use a different rule and replace each of the nouns with an adjective and a noun, to add description to them.
+每一个新名词也可以被再次取代。我们可以用和之前一样的规则，用两个用 `and` 连接的词替代 `cat` 。 或者我们可以用一个不同的规则，为了给他们增加一点描述，用一个有形容词和一个名词来取代每一个名词。
 
 &rsaquo; <code>The <strong>cat and mouse</strong> and dog walked on the carpet.</code>
 
 &rsaquo; <code>The <strong>white cat</strong> and <strong>black dog</strong> walked on the carpet.</code>
 
-These are just two examples, but English has many different rules for how types of words can be changed, manipulated and replaced.
+这只是两个例子，但是英语对于单词种类的变化，操作和替换有很多不同的规则。
 
-We notice this exact behaviour in programming languages too. In C, the body of an `if` statement contains a list of new statements. Each of these new statements, could themselves be another `if` statement. These repeated structures and replacements are reflected in all parts of the language. These are sometimes called *re-write rules* because they tell you how one thing can be *re-written* as something else.
+我们注意到这一点也精确的表现在编程语言中。在C语言里，`if` 语句里包含着一系列新的语句。每一个新语句也可以是另外一个 `if` 语句。这个重复的结构和替换都反应在语言的各个部位。 这些叫做 *(重写规则)re-write rules*，因为它们告诉你一个东西怎样能被另外一些东西 *重写* 。
 
 &rsaquo; `if (x > 5) { return x; }`
 
 &rsaquo; <code>if (x > 5) { <strong>if (x > 10) { return x; }</strong> }</code>
 
-The consequence of this observation by *Noam Chomsky* was important. It meant that although there is an infinite number of different things that can be said, or written down, in a particular language; it is still possible to process and understand all of them, with a finite number of these re-write rules. The name given to a set of these re-write rules is a *grammar*.
+*Noam Chomsky* 观察的意义是重要的。它意味着虽然我们可以用特定的语言说或者写无限多的东西,并且可以用有限的重写规则来处理和理解它们。这些重写规则的集合叫做一个 *(语法)grammar*.
 
-We can describe re-write rules in a number of ways. One way is textual. We could say something like, "a *sentence* must contain a *verb phrase*", or "a *verb phrase* can be either a *verb* or, an *adverb* and a *verb*". This method is good for humans but it is too vague for computers to understand. When programming we need to write down a more formal description of a grammar.
+我们有几个方法来描述重写规则。其中一个方法就是原文。我们可能说一些像, "一个*句子*必需包含一个*动词短语*"，或者"*动词短语* 可以是一个*动词*或者一个*副词*和一个*动词*"。这个方法对人类来说不错，但是对于计算机来说理解起来太糢糊。编程时我们需要写更加正式的语法说明。
 
-To write a programming language such as our Lisp we are going to need to understand grammars. For reading in the user input we need to write a *grammar* which describes it. Then we can use it along with our user input, to decide if the input is valid. We can also use it to build a structured internal representation, which will make the job of *understanding* it, and then *evaluating* it, performing the computations encoded within, much easier.
+为了写一个编程语言例如我们的 Lisp ，我们需要理解它的语法。为了阅读用户的输入我们需要写一个*语法*来描述它。然后我们就可以在用户输入的时候使用它，来判断输入是否有效。我们还可以用它构建结构化的内部表达， 这将让*理解*它，*计算*它，在内部表达计算机编码都更加简单。
 
-This is where a library called `mpc` comes in.
+于是一个叫 `mpc` 的库便有了用武之地。
 
 
-Parser Combinators
+解析器组合子(Parser Combinators)
 ------------------
 
-`mpc` is a *Parser Combinator* library written by yours truly. This means it is a library that allows you to build programs that understand and process particular languages. These are known as *parsers*. There are many different ways of building parsers, but the nice thing about using a *Parser Combinator* library is that it lets you build *parsers* easily, just by specifying the *grammar* ... sort of.
+`mpc` 是一个可以自己写 *解析器组合子* 库。这意味着这个库可以让你构建能够理解和处理特定语言的程序。 这些叫做*(解析器)parsers*. 有很多不同的方法可以构造解析器，用一个*解析器组合子*库的优点是你构建*解析器*的过程将变得简单，只需要指定*语法* ... 之类的。
 
-Many *Parser Combinator* libraries actually work by letting you write normal code that *looks a bit like* a grammar, not by actually specifying a grammar directly. In many situations this is fine, but sometimes it can get clunky and complicated. Luckily for us `mpc` allows for us to write normal code that just *looks like* a grammar, *or* we can use special notation to write a grammar directly!
+很多*解析器组合子*库实际上只是让你写一些*看起来有点像*一个语法的代码，而不是真正的直接指定一个语法。在很多情况下这是可以的，但是很多情况下可能会显得笨重而复杂。幸运的是 `mpc` 让我们写*看起来像*一个语法的代码， *或者* 我们可以用特殊的符号来直接写一个语法!
 
 
-Coding Grammars
+代码的语法
 ---------------
 
-So what does code that *looks like* a grammar..*look like*? Let us take a look at `mpc` by trying to write code for a grammar that recognizes [the language of Shiba Inu](http://knowyourmeme.com/memes/doge). More colloquially know as *Doge*. This language we are going to define as follows.
+那么，什么是*看起来像*一个语法的代码*? 让我们看一看 `mpc`，通过试着为一个语法写一些代码，这种语法能够识别 [the language of Shiba Inu](http://knowyourmeme.com/memes/doge). 一种如同 *Doge* 一样的口语。这种语言我们可以通过下面的代码定义。
 
-&rsaquo; An *Adjective* is either *"wow"*, *"many"*, *"so"* or *"such"*.
-&rsaquo; A *Noun* is either *"lisp"*, *"language"*, *"c"*, *"book"* or *"build"*.
-&rsaquo; A *Phrase* is an *Adjective* followed by a *Noun*.
-&rsaquo; A *Doge* is zero or more *Phrases*.
+&rsaquo; 一个 *形容词(Adjective)* 是  *"wow"*, *"many"*, *"so"* 或者 *"such"*.
+&rsaquo; 一个 *名词(Noun)* 是 *"lisp"*, *"language"*, *"c"*, *"book"* 或者 *"build"*.
+&rsaquo; 一个 *短语(Phrase)* 是一个 *形容词* 跟着一个*名词*.
+&rsaquo; 一个 *Doge* 是零个或者更多的 *短语*.
 
-We can start by trying to define *Adjective* and *Noun*. To do this we create two new parsers, represented by the type `mpc_parser_t*`, and we store them in the variables `Adjective` and `Noun`. We use the function `mpc_or` to create a parser where one of several options should be used, and the function `mpc_sym` to wrap our initial strings.
+我们可以从尝试定义*形容词*和*名词*开始。为了做这些我们要创造两个新的解析器， 表示为 `mpc_parser_t*` 类型，我们将它存储在变量 `Adjective` 和 `Noun` 中。我们用函数 `mpc_or` 来创造一个解析器，其中一个选项应该被用到，并且用函数 `mpc_sym` 来包装我们的初始字符串。
 
-If you squint your eyes you could attempt to read the code as if it were the rules we specified above.
+如果你眯着眼睛你可以试着阅读下面这段代码，就像它是我们在上面提过的规则一样。
 
 ```c
-/* Build a new parser 'Adjective' to recognize descriptions */
+/* 构造一个新解析器 'Adjective' 来识别描述 */
 mpc_parser_t* Adjective = mpc_or(4,
   mpc_sym("wow"), mpc_sym("many"),
   mpc_sym("so"),  mpc_sym("such")
 );
 
-/* Build a new parser 'Noun' to recognize things */
+/* 构造新解析器 'Noun' 来识别东西 */
 mpc_parser_t* Noun = mpc_or(5,
   mpc_sym("lisp"), mpc_sym("language"),
   mpc_sym("c"),    mpc_sym("book"),
@@ -80,24 +80,25 @@ mpc_parser_t* Noun = mpc_or(5,
 ```
 
 <div class="alert alert-warning">
-  **How can I access these `mpc` functions?**
+  **我如何使用 `mpc` 的函数?**
 
-  For now don't worry about compiling or running any of the sample code in this chapter. Just read it and see if you can understand the theory behind grammars. In the next chapter we'll get setup with `mpc` and use it for a language closer to our Lisp.
+  目前不用担心或者运行这一章的任何实例代码。只要阅读它并且看看你能不能理解语法背后的原理。下一章我们将会安装 `mpc` 并且使用它。
 </div>
 
-To define `Phrase` we can reference our existing parsers. We need to use the function `mpc_and`, that specifies one thing is required then another. As input we pass it `Adjective` and `Noun`, our previously defined parsers. This function also takes the arguments `mpcf_strfold` and `free`, which say how to join or delete the results of these parsers. Ignore these arguments for now.
+为了定义 `短语(Phrase)` 我们可以参考我们已经存在的短语。我们需要使用函数 `mpc_and`，这指定了一个东西是必要的然后再加上其他东西。作为输入我们传递 `Adjective` 和 `Noun` 给它，我们早先定义的解析器。这个函数也可以接受 `mpcf_strfold` 和 `free` 做为参数，这些表明如何加入或删除这些解析器的结果。目前忽略这些函数。
+
 
 ```c
 mpc_parser_t* Phrase = mpc_and(2, mpcf_strfold, Adjective, Noun, free);
 ```
 
-To define *Doge* we must specify that *zero or more* of some parser is required. For this we need to use the function `mpc_many`. As before, this function requires the special variable `mpcf_strfold` to say how the results are joined together, which we can ignore.
+为了定义一个 *Doge* 我们必需指定 *零个或者更多* 的一些解析器是必需的。为了这一点我们需要使用函数 `mpc_many`。正如前面所说的，这个函数要求特定的变量 `mpcf_strfold` 来表明这些结果如何连接在一起，我们可以忽略它。
 
 ```c
 mpc_parser_t* Doge = mpc_many(mpcf_strfold, Phrase);
 ```
 
-By creating a parser that looks for *zero or more* occurrences of another parser a cool thing has happened. Our `Doge` parser accepts inputs of any length. This means its language is *infinite*. Here are just some examples of possible strings `Doge` could accept. Just as we discovered in the first section of this chapter we have used a finite number of re-write rules to create an infinite language.
+通过创造一个解析器来寻找*一个或者更多*其他的解析器时一件很酷的事情发生了。我们的 `Doge` 解析器接受任意长度的输入。这意味这它的语言是*无限的*。 这里有一些 `Doge` 可以接受的字符串的例子。就像我们在这一章的第一节发现的，我们可以用有限数目的规则创造一个无限的语言。
 
 ```c
 "wow book such language many lisp"
@@ -108,7 +109,7 @@ By creating a parser that looks for *zero or more* occurrences of another parser
 "so c"
 ```
 
-If we use more `mpc` functions, we can slowly build up parsers that parse more and more complicated languages. The code we use *sort of* reads like a grammar, but becomes much more messy with added complexity. Due to this, taking this approach isn't always an easy task. A whole set of helper functions that build on simple constructs to make frequent tasks easy are all documented on the [mpc repository](http://github.com/orangeduck/mpc). This is a good approach for complicated languages, as it allows for fine-grained control, but won't be required for our needs.
+如果我们用更多的 `mpc` 函数，我们可以慢慢地建立解析器来解析越来越复杂的语言。The code we use *sort of* reads like a grammar, but becomes much more messy with added complexity. Due to this, taking this approach isn't always an easy task. A whole set of helper functions that build on simple constructs to make frequent tasks easy are all documented on the [mpc repository](http://github.com/orangeduck/mpc). This is a good approach for complicated languages, as it allows for fine-grained control, but won't be required for our needs.
 
 
 Natural Grammars
