@@ -109,15 +109,15 @@ mpc_parser_t* Doge = mpc_many(mpcf_strfold, Phrase);
 "so c"
 ```
 
-如果我们用更多的 `mpc` 函数，我们可以慢慢地建立解析器来解析越来越复杂的语言。The code we use *sort of* reads like a grammar, but becomes much more messy with added complexity. Due to this, taking this approach isn't always an easy task. A whole set of helper functions that build on simple constructs to make frequent tasks easy are all documented on the [mpc repository](http://github.com/orangeduck/mpc). This is a good approach for complicated languages, as it allows for fine-grained control, but won't be required for our needs.
+如果我们用更多的 `mpc` 函数，我们可以慢慢地建立解析器来解析越来越复杂的语言。The code we use *sort of* reads like a grammar, but becomes much more messy with added complexity. 因此，采取这种方法就不一定是一个简单的任务了。有一些有帮助的函数的文档都在[mpc repository](http://github.com/orangeduck/mpc)，它们建立在简单的结构上，可以让繁杂的任务变得简单。这对于复杂的语言是一个简单的方法，它提供了一个细粒度很好的控制，但对我们的需求来说并不是必需的。 
 
 
-Natural Grammars
+自然语法
 ----------------
 
-`mpc` lets us write grammars in a more natural form too. Rather than using C functions that look less like a grammar, we can specify the whole thing in one long string. When using this method we don&#39;t have to worry about how to join or discard inputs, with functions such as `mpcf_strfold`, or `free`. All of that is done automatically for us!
+`mpc` 也允许我们写形式更加自然的语法。我们可以在一个长字符串里定义所有的事而不是用C函数这种看起来更加不像。在使用这种方法时我们不需要担心如何通过像 `mpcf_strfold`, 或者 `free` 这样的函数添加或废弃输入。 这些都被自动完成了！
 
-Here is how we would recreate the previous examples using this method.
+下面是我们如何用这种方法重建上面的例子。
 
 ```c
 mpc_parser_t* Adjective = mpc_new("adjective");
@@ -139,39 +139,38 @@ mpca_lang(MPC_LANG_DEFAULT,
 mpc_cleanup(4, Adjective, Noun, Phrase, Doge);
 ```
 
-Without having an exactly understanding of the syntax for that long string, it should be obvious how much *clearer* the grammar is in this format. If we learn what all the special symbols mean we barely have to squint our eyes to read it as one.
+在真正理解这个长字符串的语法之前，这种形式的语法显然*更清晰*。如果我们学习了所有这些特殊符号的意思，我们就可以眯着眼睛将它们看作一体了。
 
-Another thing to notice is that the process is now in two steps. First we create and name several rules using `mpc_new` and then we define them using `mpca_lang`.
+需要注意的另外一件事是，现在这个过程分为两个步骤。首先我们用 `mpc_new` 创造和命名了一些规则，然后我们用 `mpca_lang` 来定义它们。
 
-The first argument to `mpca_lang` are the options flags. For this we just use the defaults. The second is a long multi-line string in C. This is the *grammar* specification. It consists of a number of *re-write rules*. Each rule has the name of the rule on the left, a colon `:`, and on the right it&#39;s definition terminated with a semicolon `;`.
+`mpca_lang` 的第一个参数是选项标志。对于这个我们只需要用默认的就可以了。第二个参数是一个很长的多行字符串。 这是 *(语法)grammar* 规范。它由一些*重写规则*组成。 每一个规则都有一个名字在它们的左边，一个冒号 `:`，在右边有一个分号 `;` 表示定义结束。
 
-The special symbols used to define the rules on the right hand side work as follows.
+右手边定义这些规则的特殊符号像下面这样工作。
 
 <table class='table'>
-  <tr><td>`"ab"`</td><td>The string `ab` is required.</td></tr>
-  <tr><td>`'a'`</td><td>The character `a` is required.</td></tr>
-  <tr><td>`'a' 'b'`</td><td>First `'a'` is required, then `'b'` is required..</td></tr>
-  <tr><td>`'a' | 'b'`</td><td>Either `'a'` is required, or `'b'` is required.</td></tr>
-  <tr><td>`'a'*`</td><td>Zero or more `'a'` are required.</td></tr>
-  <tr><td>`'a'+`</td><td>One or more `'a'` are required.</td></tr>
-  <tr><td>`<abba>`</td><td>The rule called `abba` is required.</td></tr>
+  <tr><td>`"ab"`</td><td>字符串 `ab` 是必需的</td></tr>
+  <tr><td>`'a'`</td><td>字符 `a` 是必需的</td></tr>
+  <tr><td>`'a' 'b'`</td><td>首先 `'a'` 是必需的，然后 `'b'` 是必需的</td></tr>
+  <tr><td>`'a' | 'b'`</td><td>`a` 或者 `b` 是必需的</td></tr>
+  <tr><td>`'a'*`</td><td>零个或者更多 `'a'` 是必需的</td></tr>
+  <tr><td>`'a'+`</td><td>一个或者更多 `'a'` 是必需的</td></tr>
+  <tr><td>`<abba>`</td><td>叫做 `abba` 的规则是必需的</td></tr>
 </table>
 
 <div class="alert alert-warning">
-  **Sounds familiar...**
+  **听起来有些熟悉...**
 
-  Did you notice that the description of what the input string to `mpca_lang` should look like sort of sounded like I was specifying a grammar? That&#39;s because it was! `mpc` uses itself internally to parse the input you give it to `mpca_lang`. It does it by specifying a *grammar* in code using the previous method. How neat is that..
+  你有注意到这些作为 `mpca_lang` 输入字符串的描述听起来像我正在指定一个语法么？ 这是因为它就是! `mpc` 使用它自己内部解析这些给 `mpca_lang` 的输入。为了做到这一点，它通过用之前的函数来指定一个语法。多么的干净利落啊。
 </div>
 
-Using what is described above verify that what I've written above is equal to what we specified in code.
+用上面描述的确认我上面写的和我们之前用代码指定的是等价的。
 
-This method of specifying a grammar is what we are going to use in the following chapters. It might seem overwhelming at first. Grammars can be difficult to understand right away. But as we continue you will become much more familiar with how to create and edit them.
+这种指定语法的方法是我们下一章将要用到的。它一开始看起来可能铺天盖地的。语法看起来不能马上被理解。但是随着我们的继续你会对如何创建和编辑它们越来越熟悉。随意创造一些符号或者符号的概念，让它们写起来更加简单。一些附加题
 
-This chapter is about theory, so if you are going to try some of the bonus marks, don't worry too much about correctness. Thinking in the right mindset is more important. Feel free to invent symbols and notation for certain concepts to make them simpler to write down. Some of the bonus marks also might require cyclic or recursive grammar stuctures, so don't worry if you have to use these!
+这一章是关于理论的，所以如果你要尝试附加题，不用太担心正确性。用正确的心态思考更加重要。一些附加题可能需要循环和递归的语法结构，所以如果你用到这些不要担心。
 
 
-
-Reference
+参考
 ---------
 
 <div class="panel-group alert alert-warning" id="accordion">
@@ -264,18 +263,18 @@ int main(int argc, char** argv) {
 </div>
 
 
-Bonus Marks
+附加题
 -----------
 
 <div class="alert alert-warning">
   <ul class="list-group">
-    <li class="list-group-item">&rsaquo; Write down some more examples of strings the `Doge` language contains.</li>
-    <li class="list-group-item">&rsaquo; Why are there back slashes `\` in front of the quote marks `"` in the grammar?</li>
-    <li class="list-group-item">&rsaquo; Why are there back slashes `\` at the end of the line in the grammar?</li>
-    <li class="list-group-item">&rsaquo; Describe textually a grammar for decimal numbers such as `0.01` or `52.221`.</li>
-    <li class="list-group-item">&rsaquo; Describe textually a grammar for web URLs such as `http://www.buildyourownlisp.com`.</li>
-    <li class="list-group-item">&rsaquo; Describe textually a grammar for simple English sentences such as `the cat sat on the mat`.</li>
-    <li class="list-group-item">&rsaquo; Describe more formally the above grammars. Use `|`, `*`, or any symbols of your own invention.</li>
-    <li class="list-group-item">&rsaquo; If you are familiar with JSON, textually describe a grammar for it.</li>
+    <li class="list-group-item">&rsaquo; 尝试写出更多 `Doge` 语言的字符串</li>
+    <li class="list-group-item">&rsaquo; 为什么语法中在引号 `"` 的前面会有反斜线 `\` ?</li>
+	<li class="list-group-item">&rsaquo; 为什么语法中在行的结尾有反斜线 `\` ?</li>
+    <li class="list-group-item">&rsaquo; 用文字描述十进制例如 `0.01` 或者 `52.221` 的语法</li>
+    <li class="list-group-item">&rsaquo; 用文字描述网址例如 `http://www.buildyourownlisp.com` 的语法</li>
+    <li class="list-group-item">&rsaquo; 用文字描述简单的英语句子例如 `the cat sat on the mat` 的语法</li>
+    <li class="list-group-item">&rsaquo; 用更正式的方法描述上面的语法。用 `|`, `*` 或者任何你发明的符号</li>
+    <li class="list-group-item">&rsaquo; 如果你熟悉 JSON，用文字来描述它的语法。</li>
   </ul>
 </div>
