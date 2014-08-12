@@ -1,82 +1,82 @@
-Parsing
+解析 (Parsing)
 =======
 
 ![polish man](img/polish_man.png "A Polish Nobleman &bull; A typical Polish Notation user")
 
-Polish Notation
+波兰表示法 (Polish Notation)
 ---------------
 
-To try out `mpc` we're going to implement a simple grammar that resembles a mathematical subset of our Lisp. It's called [Polish Notation](http://en.wikipedia.org/wiki/Polish_notation) and is a notation for arithmetic where the operator comes before the operands.
+为了尝试 `mpc` 我们将要实现一种类似我们的 Lisp 中的数学运算子的简单语法。它叫做[波兰表示法 (Polish Notation)](http://en.wikipedia.org/wiki/Polish_notation)，这是一种操作符在操作数之前的算术表示方法。
 
-For example...
+例如。。。
 <table class='table' style='display: inline'>
-  <tr><td>`1 + 2 + 6`</td><td>*is*</td><td>`+ 1 2 6`</td></tr>
-  <tr><td>`6 + (2 * 9)`</td><td>*is*</td><td>`+ 6 (* 2 9)`</td></tr>
-  <tr><td>`(10 * 2) / (4 + 2)`</td><td>*is*</td><td>`/ (* 10 2) (+ 4 2)`</td></tr>
+  <tr><td>`1 + 2 + 6`</td><td>*是*</td><td>`+ 1 2 6`</td></tr>
+  <tr><td>`6 + (2 * 9)`</td><td>*是*</td><td>`+ 6 (* 2 9)`</td></tr>
+  <tr><td>`(10 * 2) / (4 + 2)`</td><td>*是*</td><td>`/ (* 10 2) (+ 4 2)`</td></tr>
 </table>
 
-We need to work out a grammar which describes this notation. We can begin by describing it *textually* and then later formalise our thoughts.
+我们要制定一种语法来描述这个表示方法。我们可以从*用文字*描述开始，然后把我们所想的正式化。
 
-To start, we observe that in polish notation the operator always comes first in an expression, followed by either numbers or other expressions in parenthesis. This means we can say "a *program* is an *operator* followed by one or more *expressions*," where "an *expression* is either a *number*, or, in parenthesis, an *operator* followed by one or more *expressions*".
+要开始，我们可以观察到波兰表示法的表达式的开头总是操作符。后面跟着数字或者是其他在括号里的表达式。 也就是说我们可以说 "一个*程序*就是一个*操作符*后面跟着一个或者更多的*表达式 (expressions)*，"而 "一个 *表达式* 就是一个*数字*, 或者括号里一个*运算符*跟着一个或者更多的*表达式*"。
 
-More formally...
+更加正式的。。。
 
 <table class='table'>
-  <tr><td>`Program`</td><td>*the start of input*, an `Operator`, one or more `Expression`, and *the end of input*.</td></tr>
-  <tr><td>`Expression`</td><td>either a `Number` *or* `'('`, an `Operator`, one or more `Expression`, and an `')'`.</td></tr>
-  <tr><td>`Operator`</td><td>`'+'`, `'-'`, `'*'`, or `'/'`.</td></tr>
-  <tr><td>`Number`</td><td>an optional `-`, and one or more characters between `0` and `9`</td></tr>
+  <tr><td>`Program`</td><td>*输入的开始*, 一个 `Operator`，一个或者更多 `Expression` 和输入的结尾</td></tr>
+  <tr><td>`Expression`</td><td>一个 `Number` *或者* `'('`, 一个 `Operator`，一个或者更多 `Expression`, 以及一个 `')'`。</td></tr>
+  <tr><td>`Operator`</td><td>`'+'`, `'-'`, `'*'`, 或者 `'/'`。</td></tr>
+  <tr><td>`Number`</td><td>一个可选的 `-`，一个更多的字符介于 `0` 和 `9` 之间</td></tr>
 </table>
 
 
-Regular Expressions
+正则表达式 (Regular Expressions)
 -------------------
 
-We should be able to encode most of the above rules using things we know already, but *Number* and *Program* might pose some trouble. They contain a couple of constructs we've not learnt how to express yet. We don't know how to express the start or the end of input, optional characters, or range of characters.
+借助我们已经了解的东西，应该能写出上面大部分的规则，但是 *Number* 和 *Program* 可能会有一些问题。他们包含着我们还没有学过如何表达的构造。我们不知道如何表达输入的开始和结束，可选的字符，或者是一个范围的字符。
 
-These can be expressed, but they require something called a *Regular Expression*. Regular expressions are a way of writing grammars for small sections of text such as words or numbers. Grammars written using regular expressions can't consist of multiple rules, but they do give precise, and concise, control over what is matched and what isn't. Here are some basic rules for writing regular expressions.
+这些可以被表示，但是需要一个叫 *正则表达式 (Regular Expression)*的东西。正则表达式是描述一小段文本例如词或者数字的语法的方法。用正则表达式写的语法不能由符合规则构成，但是他们可以精确，简洁地控制什么是匹配的，什么是不匹配的。这里是一些写正则表达式的基本规则。
 
 <table class='table'>
-  <tr><td>`a`</td><td>The character `a` is required.</td></tr>
-  <tr><td>`[abcdef]`</td><td>Any character in the set `abcdef` is required.</td></tr>
-  <tr><td>`[a-f]`</td><td>Any character in the range `a` to `f` is required.</td></tr>
-  <tr><td>`a?`</td><td>The character `a` is optional.</td></tr>
-  <tr><td>`a*`</td><td>Zero or more of the character `a` are required.</td></tr>
-  <tr><td>`a+`</td><td>One or more of the character `a` are required.</td></tr>
-  <tr><td>`^`</td><td>The start of input is required.</td></tr>
-  <tr><td>`$`</td><td>The end of input is required.</td></tr>
+  <tr><td>`a`</td><td>匹配字符 `a` </td></tr>
+  <tr><td>`[abcdef]`</td><td>匹配集合 `abcdef` 中的任一字符。</td></tr>
+  <tr><td>`[a-f]`</td><td>匹配任一在范围 `a` 到 `f` 内的字符。</td></tr>
+  <tr><td>`a?`</td><td>字符 `a` 是可选的。</td></tr>
+  <tr><td>`a*`</td><td>匹配零个或者更多的字符 `a` 是。</td></tr>
+  <tr><td>`a+`</td><td>匹配一个或者更多字符 `a` 。</td></tr>
+  <tr><td>`^`</td><td>匹配输入的开始</td></tr>
+  <tr><td>`$`</td><td>匹配输入的结束</td></tr>
 </table>
 
-These are all the regular expression rules we need for now. [Whole books](http://regex.learncodethehardway.org/) have been written on learning regular expressions. For those curious much more information can be found online or from these sources. We will be using them in later chapters, so some basic knowledge will be required, but you won't need to master them for now.
+这些就是我们现在需要的全部正则表达式了。[Whole books](http://regex.learncodethehardway.org/) 写了如何学习正则表达式。如果好奇的话更多的资源可以从这里在线获得。我们将在后面的章节用到它们，需要一些基础的知识，但是你不需要现在掌握它们。
 
-In an `mpc` grammar we write regular expressions by putting them between forward slashes `/`. Using the above guide our *Number* rule can be expressed as a regular expression using the string `/-?[0-9]+/`.
+在 `mpc` 的语法里我们将正则表达式写在斜杠 `/` 之间。用上面的指南我们的 *Number* 规则可以写成一个正则表达式，使用字符串 `/-?[0-9]+/`.
 
 
-Installing mpc
+安装 mpc
 --------------
 
-Before we work on writing this grammar we first need to *include* the `mpc` headers, and then *link* to the `mpc` library, just as we did for `editline` on Linux and Mac. Starting with your code from chapter 4, you can rename the file to `parsing.c` and download `mpc.h` and `mpc.c` from the [mpc repo](http://github.com/orangeduck/mpc). Put these in the same directory as your source file.
+在我们开始写这个语法之前我们首先需要 *包含* `mpc` 头，然后 *连接* `mpc` 库，就像我们在 Linux 和 Mac 下使用 `editline` 一样。 从你第四章的代码开始， 你可以将文件重命名为 `parsing.c` 并且从 [mpc repo](http://github.com/orangeduck/mpc) 下载 `mpc.h` 和 `mpc.c` 。把它们和你的源文件放到同一文件夹。
 
-To *include* `mpc` put `#include "mpc.h"` at the top of the file. To *link* to `mpc` put `mpc.c` directly into the compile command. On linux you will also have to link to the maths library by adding the flag `-lm`.
+为了*包含*`mpc` 把 `#include "mpc.h"` 放在文件的顶部。为了*连接* `mpc` 把 `mpc.c` 文件夹放进编译命令。在 linux 下你还要通过添加标记 `-lm` 连接数学库。
 
-On **Linux** and **Mac**
+在 **Linux** 和 **Mac** 上
 
 ```
 cc -std=c99 -Wall parsing.c mpc.c -ledit -lm -o parsing
 ```
 
-On **Windows**
+在 **Windows** 上
 
 ```
 cc -std=c99 -Wall parsing.c mpc.c -o parsing
 ```
 
 <div class="alert alert-warning">
-  **Hold on, don't you mean `#include <mpc.h>`?**
+  **等等，你的意思是不是 `#include <mpc.h>`?**
 
-  There are actually two ways to include files in C. One is using angular brackets `>` as we've seen so far, and the other is with quotation marks `""`.
+  实际上C语言有两种方法来包含文件。其中一种是用角括号 `>` ，另外一种是用引号 `""`.
 
-  The only difference between the two is that using angular brackets searches the system locations for headers first, while quotation marks searches the current directory first. Because of this system headers such as `<stdio.h>` are typically put in angular brackets, while local headers such as `"mpc.h"` are typically put in quotation marks.
+  它们俩唯一的区别用角括号会先从系统路径搜寻头文件，而引号表示先从当前的文件夹搜索文件。因此系统头文件例如 `<stdio.h>` 通常放在角括号里，而私有的头文件例如 `"mpc.h"` 通常放在引号里。
 </div>
 
 
