@@ -80,19 +80,19 @@ cc -std=c99 -Wall parsing.c mpc.c -o parsing
 </div>
 
 
-Polish Notation Grammar
+波兰表示法的语法
 -----------------------
 
-Formalising the above rules further, and using some regular expressions, we can write a final grammar for the language of polish notation as follows. Read the below code and verify that it matches what we had written textually, and our ideas of polish notation.
+进一步的形式化上面的语法，并且用一些正则表达式，我们可以像下面写出波兰表示法的最终语法。读下面的代码并且验证它是否和我们用文字写的波兰表示法的语法相同。
 
 ```c
-/* Create Some Parsers */
+/* 创造一些解析器 */
 mpc_parser_t* Number   = mpc_new("number");
 mpc_parser_t* Operator = mpc_new("operator");
 mpc_parser_t* Expr     = mpc_new("expr");
 mpc_parser_t* Lispy    = mpc_new("lispy");
 
-/* Define them with the following Language */
+/* 用下面的语言定义它们 */
 mpca_lang(MPC_LANG_DEFAULT,
   "                                                     \
     number   : /-?[0-9]+/ ;                             \
@@ -103,45 +103,45 @@ mpca_lang(MPC_LANG_DEFAULT,
   Number, Operator, Expr, Lispy);
 ```
 
-We need to add this to the interactive prompt we started on in chapter 4. Put this code right at the beginning of the `main` function before we print the *Version* and *Exit* information. At the end of our program we also need to delete the parsers when we are done with them. Right before `main` returns we should place the following clean-up code.
+我们需要把这些加到我们在第四章开始写的交互式提示符里。直接将这些代码放到 `main` 函数的开始处，在输出*版本*和*退出*信息之前。在程序的末尾我们也需要删除这些解析器。我们应该将下面的清除代码放在 `main` 返回前。
 
 ```c
-/* Undefine and Delete our Parsers */
+/* 删除我们的解析器 */
 mpc_cleanup(4, Number, Operator, Expr, Lispy);
 ```
 
 <div class="alert alert-warning">
-  **I'm getting an error `undefined reference to `mpc_lang'`**
+  **我得到一个错误: `undefined reference to `mpc_lang'`**
 
-  That should be `mpca_lang`, with an `a` at the end!
+  那应该是 `mpca_lang`，有一个 `a` 在末尾!
 </div>
 
-Parsing User Input
+解析用户输入
 ------------------
 
-Our new code creates a `mpc` parser for our *Polish Notation* language, but we still need to actually *use* it on the user input supplied each time from the prompt. We need to edit our `while` loop so that rather than just echoing user input back, it actually attempts to parse the input using our parser. We can do this by replacing the call to `printf` with the following `mpc` code, that makes use of our program parser `Lispy`.
+我们的代码为我们的*波兰表示法*语言创建了一个 `mpc` 解析器，但是我们实际上每次用户输入时都要*用*到它。我们需要修改我们的 `while` 循环而不是只是把用户的输入显示回去，它事实上将尝试用我们的解析器解析用户的输入。为了做到这一点，我们可以用下面的 `mpc` 代码替代调用 `printf` 函数，这用到了我们的解析器 `Lispy`.
 
 ```c
-/* Attempt to Parse the user Input */
+/* 尝试解析用户输入 */
 mpc_result_t r;
 if (mpc_parse("stdin>";, input, Lispy, &;r)) {
   /* On Success Print the AST */
   mpc_ast_print(r.output);
   mpc_ast_delete(r.output);
 } else {
-  /* Otherwise Print the Error */
+  /* 否则打印错误 */
   mpc_err_print(r.error);
   mpc_err_delete(r.error);
 }
 ```
 
-This code calls the `mpc_parse` function with our parser `Lispy`, and the input string `input`. It copies the result of the parse into `r` and returns `1` on success and `0` on failure. We use the address of operator `&` on `r` when we pass it to the function. This operator will be explained in more detail in later chapters.
+这个参数为我们的解析器 `Lispy` 和字符串 `input` 的函数叫做 `mpc_parse`。它将解析的结果拷贝进 `r` 并在成功时返回 `1`，失败时返回 `0` 。在我们将 `r` 传递给函数时我们对 `r` 使用取地址符号 `&`。这个操作符会在后面的章节中做详细的解释。
 
-On success a internal structure is copied into `r`, in the field `output`. We can print out this structure using `mpc_ast_print` and delete it using `mpc_ast_delete`.
+成功时一个内部结构体被复制进 `r` 的字段 `output` 里。我们可以使用 `mpc_ast_print` 打印这个结构体，并使用 `mpc_ast_delete` 删除它。
 
-Otherwise there has been an error, which is copied into `r` in the field `error`. We can print it out using `mpc_err_print` and delete it using `mpc_err_delete`.
+反之就会出现一个错误，它被复制进 `r` 的 `error` 字段里。 我们可以用 `mpc_err_print`打印它并且用 `mpc_err_delete` 删除它。
 
-Compile these updates, and take this program for a spin. Try out different inputs and see how the system reacts. Correct behaviour should look like the following.
+编译这些更新。尝试不同的输入并且看看系统如何反应。正确的表现应该看起来像下面这样。
 
 ```lispy
 Lispy Version 0.0.0.0.2
@@ -167,13 +167,13 @@ lispy>
 ```
 
 <div class="alert alert-warning">
-  **I'm getting an error `stdin>:0:0: error: Parser Undefined!`.**
+  **我碰到一个错误 `stdin>:0:0: error: Parser Undefined!`.**
 
-  This error is due to the syntax for your grammar supplied to `mpca_lang` being incorrect. See if you can work out what part of the grammar is incorrect. You can use the reference code for this chapter to help you find this, and verify how the grammar should look.
+  这个错误是因为你提供给 `mpca_lang` 的语法有语法错误。看看你能不能找出哪一部分是错误的。你可以使用这一章提供的参考代码帮助你找出错误，并验证语法应该是什么样子。
 </div>
 
 
-Reference
+参考
 ---------
 
 <div class="panel-group alert alert-warning" id="accordion">
@@ -265,18 +265,18 @@ int main(int argc, char** argv) {
 </div>
 
 
-Bonus Marks
+附加题
 -----------
 
 <div class="alert alert-warning">
   <ul class="list-group">
-    <li class="list-group-item">&rsaquo; Write a regular expression matching strings of all `a` or `b` such as `aababa` or `bbaa`.</li>
-    <li class="list-group-item">&rsaquo; Write a regular expression matching strings of consecutive `a` and `b` such as `ababab` or `aba`.</li>
-    <li class="list-group-item">&rsaquo; Write a regular expression matching `pit`, `pot` and `respite` but *not* `peat`, `spit`, or `part`.</li>
-    <li class="list-group-item">&rsaquo; Change the grammar to add a new operator such as `%`.</li>
-    <li class="list-group-item">&rsaquo; Change the grammar to recognize operators written in textual format `add`, `sub`, `mul`, `div`.</li>
-    <li class="list-group-item">&rsaquo; Change the grammar to recognize decimal numbers such as `0.01`, `5.21`, or `10.2`.</li>
-    <li class="list-group-item">&rsaquo; Change the grammar to make the operators written conventionally, between two expressions.</li>
-    <li class="list-group-item">&rsaquo; Use the grammar from the previous chapter to parse `Doge`. You must add *start* and *end* of input!</li>
+    <li class="list-group-item">&rsaquo; 写一个正则表达式来匹配全部由 `a` 或则 `b` 组成的字符串例如 `aababa` 或者 `bbaa`。</li>
+    <li class="list-group-item">&rsaquo; 写一个正则表达式来匹配由连续的 `a` 和 `b` 组成的字符串例如 `ababab` or `aba`。</li>
+    <li class="list-group-item">&rsaquo; 写一个正则表达式来匹配 `pit`, `pot` 和 `respite` 但是*不匹配* `peat`, `spit`, 或者 `part`。</li>
+    <li class="list-group-item">&rsaquo; 改变语法来添加一个新的运算符例如 `%`。</li>
+    <li class="list-group-item">&rsaquo; 改变语法来识别文字格式的运算符例如 `add`, `sub`, `mul`, `div`。</li>
+    <li class="list-group-item">&rsaquo; 改变语法来识别全部的十进制数字例如 `0.01`, `5.21`, or `10.2`。</li>
+    <li class="list-group-item">&rsaquo; 改变语法使得运算符以传统的方式放在两个表达式之间。</li>
+    <li class="list-group-item">&rsaquo; 使用前面章节的语法解析 `Doge`，你必须添加输入的*开始*和*结束*!</li>
   </ul>
 </div>
