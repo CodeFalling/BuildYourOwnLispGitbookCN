@@ -34,7 +34,7 @@
 
 
         
-    <div class="book" data-github="CodeFalling/BuildYourOwnLispGitbookCN" data-level="5" data-basepath="." data-revision="1407742398474">
+    <div class="book" data-github="CodeFalling/BuildYourOwnLispGitbookCN" data-level="5" data-basepath="." data-revision="1408208879365">
     <div class="book-header">
     <!-- Actions Left -->
     <a href="#" class="btn pull-left toggle-summary" aria-label="Toggle summary"><i class="fa fa-align-justify"></i></a>
@@ -473,71 +473,71 @@
 
                 <div class="page-inner">
                 
-                    <section class="normal" id="section-gitbook_14">
+                    <section class="normal" id="section-gitbook_13">
                     
-                        <h1 id="parsing">Parsing</h1>
+                        <h1 id="-parsing">解析 (Parsing)</h1>
 <p><img src="img/polish_man.png" alt="polish man" title="A Polish Nobleman &bull; A typical Polish Notation user"></p>
-<h2 id="polish-notation">Polish Notation</h2>
-<p>To try out <code>mpc</code> we&#39;re going to implement a simple grammar that resembles a mathematical subset of our Lisp. It&#39;s called <a href="http://en.wikipedia.org/wiki/Polish_notation" target="_blank">Polish Notation</a> and is a notation for arithmetic where the operator comes before the operands.</p>
-<p>For example...</p>
+<h2 id="-polish-notation">波兰表示法 (Polish Notation)</h2>
+<p>为了尝试 <code>mpc</code> 我们将要实现一种类似我们的 Lisp 中的数学运算子的简单语法。它叫做<a href="http://en.wikipedia.org/wiki/Polish_notation" target="_blank">波兰表示法 (Polish Notation)</a>，这是一种操作符在操作数之前的算术表示方法。</p>
+<p>例如。。。</p>
 <table class='table' style='display: inline'>
-  <tr><td><code>1 + 2 + 6</code></td><td><em>is</em></td><td><code>+ 1 2 6</code></td></tr>
-  <tr><td><code>6 + (2 * 9)</code></td><td><em>is</em></td><td><code>+ 6 (* 2 9)</code></td></tr>
-  <tr><td><code>(10 * 2) / (4 + 2)</code></td><td><em>is</em></td><td><code>/ (* 10 2) (+ 4 2)</code></td></tr>
+  <tr><td><code>1 + 2 + 6</code></td><td><em>是</em></td><td><code>+ 1 2 6</code></td></tr>
+  <tr><td><code>6 + (2 * 9)</code></td><td><em>是</em></td><td><code>+ 6 (* 2 9)</code></td></tr>
+  <tr><td><code>(10 * 2) / (4 + 2)</code></td><td><em>是</em></td><td><code>/ (* 10 2) (+ 4 2)</code></td></tr>
 </table>
 
-<p>We need to work out a grammar which describes this notation. We can begin by describing it <em>textually</em> and then later formalise our thoughts.</p>
-<p>To start, we observe that in polish notation the operator always comes first in an expression, followed by either numbers or other expressions in parenthesis. This means we can say &quot;a <em>program</em> is an <em>operator</em> followed by one or more <em>expressions</em>,&quot; where &quot;an <em>expression</em> is either a <em>number</em>, or, in parenthesis, an <em>operator</em> followed by one or more <em>expressions</em>&quot;.</p>
-<p>More formally...</p>
+<p>我们要制定一种语法来描述这个表示方法。我们可以从<em>用文字</em>描述开始，然后把我们所想的正式化。</p>
+<p>要开始，我们可以观察到波兰表示法的表达式的开头总是操作符。后面跟着数字或者是其他在括号里的表达式。 也就是说我们可以说 &quot;一个<em>程序</em>就是一个<em>操作符</em>后面跟着一个或者更多的<em>表达式 (expressions)</em>，&quot;而 &quot;一个 <em>表达式</em> 就是一个<em>数字</em>, 或者括号里一个<em>运算符</em>跟着一个或者更多的<em>表达式</em>&quot;。</p>
+<p>更加正式的。。。</p>
 <table class='table'>
-  <tr><td><code>Program</code></td><td><em>the start of input</em>, an <code>Operator</code>, one or more <code>Expression</code>, and <em>the end of input</em>.</td></tr>
-  <tr><td><code>Expression</code></td><td>either a <code>Number</code> <em>or</em> <code>&#39;(&#39;</code>, an <code>Operator</code>, one or more <code>Expression</code>, and an <code>&#39;)&#39;</code>.</td></tr>
-  <tr><td><code>Operator</code></td><td><code>&#39;+&#39;</code>, <code>&#39;-&#39;</code>, <code>&#39;*&#39;</code>, or <code>&#39;/&#39;</code>.</td></tr>
-  <tr><td><code>Number</code></td><td>an optional <code>-</code>, and one or more characters between <code>0</code> and <code>9</code></td></tr>
+  <tr><td><code>Program</code></td><td><em>输入的开始</em>, 一个 <code>Operator</code>，一个或者更多 <code>Expression</code> 和输入的结尾</td></tr>
+  <tr><td><code>Expression</code></td><td>一个 <code>Number</code> <em>或者</em> <code>&#39;(&#39;</code>, 一个 <code>Operator</code>，一个或者更多 <code>Expression</code>, 以及一个 <code>&#39;)&#39;</code>。</td></tr>
+  <tr><td><code>Operator</code></td><td><code>&#39;+&#39;</code>, <code>&#39;-&#39;</code>, <code>&#39;*&#39;</code>, 或者 <code>&#39;/&#39;</code>。</td></tr>
+  <tr><td><code>Number</code></td><td>一个可选的 <code>-</code>，一个更多的字符介于 <code>0</code> 和 <code>9</code> 之间</td></tr>
 </table>
 
 
-<h2 id="regular-expressions">Regular Expressions</h2>
-<p>We should be able to encode most of the above rules using things we know already, but <em>Number</em> and <em>Program</em> might pose some trouble. They contain a couple of constructs we&#39;ve not learnt how to express yet. We don&#39;t know how to express the start or the end of input, optional characters, or range of characters.</p>
-<p>These can be expressed, but they require something called a <em>Regular Expression</em>. Regular expressions are a way of writing grammars for small sections of text such as words or numbers. Grammars written using regular expressions can&#39;t consist of multiple rules, but they do give precise, and concise, control over what is matched and what isn&#39;t. Here are some basic rules for writing regular expressions.</p>
+<h2 id="-regular-expressions">正则表达式 (Regular Expressions)</h2>
+<p>借助我们已经了解的东西，应该能写出上面大部分的规则，但是 <em>Number</em> 和 <em>Program</em> 可能会有一些问题。他们包含着我们还没有学过如何表达的构造。我们不知道如何表达输入的开始和结束，可选的字符，或者是一个范围的字符。</p>
+<p>这些可以被表示，但是需要一个叫 <em>正则表达式 (Regular Expression)</em>的东西。正则表达式是描述一小段文本例如词或者数字的语法的方法。用正则表达式写的语法不能由符合规则构成，但是他们可以精确，简洁地控制什么是匹配的，什么是不匹配的。这里是一些写正则表达式的基本规则。</p>
 <table class='table'>
-  <tr><td><code>a</code></td><td>The character <code>a</code> is required.</td></tr>
-  <tr><td><code>[abcdef]</code></td><td>Any character in the set <code>abcdef</code> is required.</td></tr>
-  <tr><td><code>[a-f]</code></td><td>Any character in the range <code>a</code> to <code>f</code> is required.</td></tr>
-  <tr><td><code>a?</code></td><td>The character <code>a</code> is optional.</td></tr>
-  <tr><td><code>a*</code></td><td>Zero or more of the character <code>a</code> are required.</td></tr>
-  <tr><td><code>a+</code></td><td>One or more of the character <code>a</code> are required.</td></tr>
-  <tr><td><code>^</code></td><td>The start of input is required.</td></tr>
-  <tr><td><code>$</code></td><td>The end of input is required.</td></tr>
+  <tr><td><code>a</code></td><td>匹配字符 <code>a</code> </td></tr>
+  <tr><td><code>[abcdef]</code></td><td>匹配集合 <code>abcdef</code> 中的任一字符。</td></tr>
+  <tr><td><code>[a-f]</code></td><td>匹配任一在范围 <code>a</code> 到 <code>f</code> 内的字符。</td></tr>
+  <tr><td><code>a?</code></td><td>字符 <code>a</code> 是可选的。</td></tr>
+  <tr><td><code>a*</code></td><td>匹配零个或者更多的字符 <code>a</code> 是。</td></tr>
+  <tr><td><code>a+</code></td><td>匹配一个或者更多字符 <code>a</code> 。</td></tr>
+  <tr><td><code>^</code></td><td>匹配输入的开始</td></tr>
+  <tr><td><code>$</code></td><td>匹配输入的结束</td></tr>
 </table>
 
-<p>These are all the regular expression rules we need for now. <a href="http://regex.learncodethehardway.org/" target="_blank">Whole books</a> have been written on learning regular expressions. For those curious much more information can be found online or from these sources. We will be using them in later chapters, so some basic knowledge will be required, but you won&#39;t need to master them for now.</p>
-<p>In an <code>mpc</code> grammar we write regular expressions by putting them between forward slashes <code>/</code>. Using the above guide our <em>Number</em> rule can be expressed as a regular expression using the string <code>/-?[0-9]+/</code>.</p>
-<h2 id="installing-mpc">Installing mpc</h2>
-<p>Before we work on writing this grammar we first need to <em>include</em> the <code>mpc</code> headers, and then <em>link</em> to the <code>mpc</code> library, just as we did for <code>editline</code> on Linux and Mac. Starting with your code from chapter 4, you can rename the file to <code>parsing.c</code> and download <code>mpc.h</code> and <code>mpc.c</code> from the <a href="http://github.com/orangeduck/mpc" target="_blank">mpc repo</a>. Put these in the same directory as your source file.</p>
-<p>To <em>include</em> <code>mpc</code> put <code>#include &quot;mpc.h&quot;</code> at the top of the file. To <em>link</em> to <code>mpc</code> put <code>mpc.c</code> directly into the compile command. On linux you will also have to link to the maths library by adding the flag <code>-lm</code>.</p>
-<p>On <strong>Linux</strong> and <strong>Mac</strong></p>
+<p>这些就是我们现在需要的全部正则表达式了。<a href="http://regex.learncodethehardway.org/" target="_blank">Whole books</a> 写了如何学习正则表达式。如果好奇的话更多的资源可以从这里在线获得。我们将在后面的章节用到它们，需要一些基础的知识，但是你不需要现在掌握它们。</p>
+<p>在 <code>mpc</code> 的语法里我们将正则表达式写在斜杠 <code>/</code> 之间。用上面的指南我们的 <em>Number</em> 规则可以写成一个正则表达式，使用字符串 <code>/-?[0-9]+/</code>.</p>
+<h2 id="-mpc">安装 mpc</h2>
+<p>在我们开始写这个语法之前我们首先需要 <em>包含</em> <code>mpc</code> 头，然后 <em>连接</em> <code>mpc</code> 库，就像我们在 Linux 和 Mac 下使用 <code>editline</code> 一样。 从你第四章的代码开始， 你可以将文件重命名为 <code>parsing.c</code> 并且从 <a href="http://github.com/orangeduck/mpc" target="_blank">mpc repo</a> 下载 <code>mpc.h</code> 和 <code>mpc.c</code> 。把它们和你的源文件放到同一文件夹。</p>
+<p>为了<em>包含</em><code>mpc</code> 把 <code>#include &quot;mpc.h&quot;</code> 放在文件的顶部。为了<em>连接</em> <code>mpc</code> 把 <code>mpc.c</code> 文件夹放进编译命令。在 linux 下你还要通过添加标记 <code>-lm</code> 连接数学库。</p>
+<p>在 <strong>Linux</strong> 和 <strong>Mac</strong> 上</p>
 <pre><code>cc -std=c99 -Wall parsing.c mpc.c -ledit -lm -o parsing
-</code></pre><p>On <strong>Windows</strong></p>
+</code></pre><p>在 <strong>Windows</strong> 上</p>
 <pre><code>cc -std=c99 -Wall parsing.c mpc.c -o parsing
 </code></pre><div class="alert alert-warning">
-  <strong>Hold on, don&#39;t you mean <code>#include &lt;mpc.h&gt;</code>?</strong>
+  <strong>等等，你的意思是不是 <code>#include &lt;mpc.h&gt;</code>?</strong>
 
-  There are actually two ways to include files in C. One is using angular brackets <code>&gt;</code> as we&#39;ve seen so far, and the other is with quotation marks <code>&quot;&quot;</code>.
+  实际上C语言有两种方法来包含文件。其中一种是用角括号 <code>&gt;</code> ，另外一种是用引号 <code>&quot;&quot;</code>.
 
-  The only difference between the two is that using angular brackets searches the system locations for headers first, while quotation marks searches the current directory first. Because of this system headers such as <code>&lt;stdio.h&gt;</code> are typically put in angular brackets, while local headers such as <code>&quot;mpc.h&quot;</code> are typically put in quotation marks.
+  它们俩唯一的区别用角括号会先从系统路径搜寻头文件，而引号表示先从当前的文件夹搜索文件。因此系统头文件例如 <code>&lt;stdio.h&gt;</code> 通常放在角括号里，而私有的头文件例如 <code>&quot;mpc.h&quot;</code> 通常放在引号里。
 </div>
 
 
-<h2 id="polish-notation-grammar">Polish Notation Grammar</h2>
-<p>Formalising the above rules further, and using some regular expressions, we can write a final grammar for the language of polish notation as follows. Read the below code and verify that it matches what we had written textually, and our ideas of polish notation.</p>
-<pre><code class="lang-c"><span class="hljs-comment">/* Create Some Parsers */</span>
+<h2 id="">波兰表示法的语法</h2>
+<p>进一步的形式化上面的语法，并且用一些正则表达式，我们可以像下面写出波兰表示法的最终语法。读下面的代码并且验证它是否和我们用文字写的波兰表示法的语法相同。</p>
+<pre><code class="lang-c"><span class="hljs-comment">/* 创造一些解析器 */</span>
 mpc_parser_t* Number   = mpc_new(<span class="hljs-string">"number"</span>);
 mpc_parser_t* Operator = mpc_new(<span class="hljs-string">"operator"</span>);
 mpc_parser_t* Expr     = mpc_new(<span class="hljs-string">"expr"</span>);
 mpc_parser_t* Lispy    = mpc_new(<span class="hljs-string">"lispy"</span>);
 
-<span class="hljs-comment">/* Define them with the following Language */</span>
+<span class="hljs-comment">/* 用下面的语言定义它们 */</span>
 mpca_lang(MPC_LANG_DEFAULT,
   <span class="hljs-string">"                                                     \
     number   : /-?[0-9]+/ ;                             \
@@ -547,34 +547,34 @@ mpca_lang(MPC_LANG_DEFAULT,
   "</span>,
   Number, Operator, Expr, Lispy);
 </code></pre>
-<p>We need to add this to the interactive prompt we started on in chapter 4. Put this code right at the beginning of the <code>main</code> function before we print the <em>Version</em> and <em>Exit</em> information. At the end of our program we also need to delete the parsers when we are done with them. Right before <code>main</code> returns we should place the following clean-up code.</p>
-<pre><code class="lang-c"><span class="hljs-comment">/* Undefine and Delete our Parsers */</span>
+<p>我们需要把这些加到我们在第四章开始写的交互式提示符里。直接将这些代码放到 <code>main</code> 函数的开始处，在输出<em>版本</em>和<em>退出</em>信息之前。在程序的末尾我们也需要删除这些解析器。我们应该将下面的清除代码放在 <code>main</code> 返回前。</p>
+<pre><code class="lang-c"><span class="hljs-comment">/* 删除我们的解析器 */</span>
 mpc_cleanup(<span class="hljs-number">4</span>, Number, Operator, Expr, Lispy);
 </code></pre>
 <div class="alert alert-warning">
-  <strong>I&#39;m getting an error <code>undefined reference to</code>mpc_lang&#39;`</strong>
+  <strong>我得到一个错误: <code>undefined reference to</code>mpc_lang&#39;`</strong>
 
-  That should be <code>mpca_lang</code>, with an <code>a</code> at the end!
+  那应该是 <code>mpca_lang</code>，有一个 <code>a</code> 在末尾!
 </div>
 
-<h2 id="parsing-user-input">Parsing User Input</h2>
-<p>Our new code creates a <code>mpc</code> parser for our <em>Polish Notation</em> language, but we still need to actually <em>use</em> it on the user input supplied each time from the prompt. We need to edit our <code>while</code> loop so that rather than just echoing user input back, it actually attempts to parse the input using our parser. We can do this by replacing the call to <code>printf</code> with the following <code>mpc</code> code, that makes use of our program parser <code>Lispy</code>.</p>
-<pre><code class="lang-c"><span class="hljs-comment">/* Attempt to Parse the user Input */</span>
+<h2 id="">解析用户输入</h2>
+<p>我们的代码为我们的<em>波兰表示法</em>语言创建了一个 <code>mpc</code> 解析器，但是我们实际上每次用户输入时都要<em>用</em>到它。我们需要修改我们的 <code>while</code> 循环而不是只是把用户的输入显示回去，它事实上将尝试用我们的解析器解析用户的输入。为了做到这一点，我们可以用下面的 <code>mpc</code> 代码替代调用 <code>printf</code> 函数，这用到了我们的解析器 <code>Lispy</code>.</p>
+<pre><code class="lang-c"><span class="hljs-comment">/* 尝试解析用户输入 */</span>
 mpc_result_t r;
 <span class="hljs-keyword">if</span> (mpc_parse(<span class="hljs-string">"stdin&gt;"</span>;, input, Lispy, &amp;;r)) {
   <span class="hljs-comment">/* On Success Print the AST */</span>
   mpc_ast_print(r.output);
   mpc_ast_delete(r.output);
 } <span class="hljs-keyword">else</span> {
-  <span class="hljs-comment">/* Otherwise Print the Error */</span>
+  <span class="hljs-comment">/* 否则打印错误 */</span>
   mpc_err_print(r.error);
   mpc_err_delete(r.error);
 }
 </code></pre>
-<p>This code calls the <code>mpc_parse</code> function with our parser <code>Lispy</code>, and the input string <code>input</code>. It copies the result of the parse into <code>r</code> and returns <code>1</code> on success and <code>0</code> on failure. We use the address of operator <code>&amp;</code> on <code>r</code> when we pass it to the function. This operator will be explained in more detail in later chapters.</p>
-<p>On success a internal structure is copied into <code>r</code>, in the field <code>output</code>. We can print out this structure using <code>mpc_ast_print</code> and delete it using <code>mpc_ast_delete</code>.</p>
-<p>Otherwise there has been an error, which is copied into <code>r</code> in the field <code>error</code>. We can print it out using <code>mpc_err_print</code> and delete it using <code>mpc_err_delete</code>.</p>
-<p>Compile these updates, and take this program for a spin. Try out different inputs and see how the system reacts. Correct behaviour should look like the following.</p>
+<p>这个参数为我们的解析器 <code>Lispy</code> 和字符串 <code>input</code> 的函数叫做 <code>mpc_parse</code>。它将解析的结果拷贝进 <code>r</code> 并在成功时返回 <code>1</code>，失败时返回 <code>0</code> 。在我们将 <code>r</code> 传递给函数时我们对 <code>r</code> 使用取地址符号 <code>&amp;</code>。这个操作符会在后面的章节中做详细的解释。</p>
+<p>成功时一个内部结构体被复制进 <code>r</code> 的字段 <code>output</code> 里。我们可以使用 <code>mpc_ast_print</code> 打印这个结构体，并使用 <code>mpc_ast_delete</code> 删除它。</p>
+<p>反之就会出现一个错误，它被复制进 <code>r</code> 的 <code>error</code> 字段里。 我们可以用 <code>mpc_err_print</code>打印它并且用 <code>mpc_err_delete</code> 删除它。</p>
+<p>编译这些更新。尝试不同的输入并且看看系统如何反应。正确的表现应该看起来像下面这样。</p>
 <pre><code class="lang-lispy">Lispy Version 0.0.0.0.2
 Press Ctrl+c to Exit
 
@@ -597,13 +597,13 @@ stdin&gt;:0:3: error: expected end of input at &#39;d&#39;
 lispy&gt;
 </code></pre>
 <div class="alert alert-warning">
-  <strong>I&#39;m getting an error <code>stdin&gt;:0:0: error: Parser Undefined!</code>.</strong>
+  <strong>我碰到一个错误 <code>stdin&gt;:0:0: error: Parser Undefined!</code>.</strong>
 
-  This error is due to the syntax for your grammar supplied to <code>mpca_lang</code> being incorrect. See if you can work out what part of the grammar is incorrect. You can use the reference code for this chapter to help you find this, and verify how the grammar should look.
+  这个错误是因为你提供给 <code>mpca_lang</code> 的语法有语法错误。看看你能不能找出哪一部分是错误的。你可以使用这一章提供的参考代码帮助你找出错误，并验证语法应该是什么样子。
 </div>
 
 
-<h2 id="reference">Reference</h2>
+<h2 id="">参考</h2>
 <div class="panel-group alert alert-warning" id="accordion">
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -692,17 +692,17 @@ int main(int argc, char** argv) {
 </div>
 
 
-<h2 id="bonus-marks">Bonus Marks</h2>
+<h2 id="">附加题</h2>
 <div class="alert alert-warning">
   <ul class="list-group">
-    <li class="list-group-item">&rsaquo; Write a regular expression matching strings of all <code>a</code> or <code>b</code> such as <code>aababa</code> or <code>bbaa</code>.</li>
-    <li class="list-group-item">&rsaquo; Write a regular expression matching strings of consecutive <code>a</code> and <code>b</code> such as <code>ababab</code> or <code>aba</code>.</li>
-    <li class="list-group-item">&rsaquo; Write a regular expression matching <code>pit</code>, <code>pot</code> and <code>respite</code> but <em>not</em> <code>peat</code>, <code>spit</code>, or <code>part</code>.</li>
-    <li class="list-group-item">&rsaquo; Change the grammar to add a new operator such as <code>%</code>.</li>
-    <li class="list-group-item">&rsaquo; Change the grammar to recognize operators written in textual format <code>add</code>, <code>sub</code>, <code>mul</code>, <code>div</code>.</li>
-    <li class="list-group-item">&rsaquo; Change the grammar to recognize decimal numbers such as <code>0.01</code>, <code>5.21</code>, or <code>10.2</code>.</li>
-    <li class="list-group-item">&rsaquo; Change the grammar to make the operators written conventionally, between two expressions.</li>
-    <li class="list-group-item">&rsaquo; Use the grammar from the previous chapter to parse <code>Doge</code>. You must add <em>start</em> and <em>end</em> of input!</li>
+    <li class="list-group-item">&rsaquo; 写一个正则表达式来匹配全部由 <code>a</code> 或则 <code>b</code> 组成的字符串例如 <code>aababa</code> 或者 <code>bbaa</code>。</li>
+    <li class="list-group-item">&rsaquo; 写一个正则表达式来匹配由连续的 <code>a</code> 和 <code>b</code> 组成的字符串例如 <code>ababab</code> or <code>aba</code>。</li>
+    <li class="list-group-item">&rsaquo; 写一个正则表达式来匹配 <code>pit</code>, <code>pot</code> 和 <code>respite</code> 但是<em>不匹配</em> <code>peat</code>, <code>spit</code>, 或者 <code>part</code>。</li>
+    <li class="list-group-item">&rsaquo; 改变语法来添加一个新的运算符例如 <code>%</code>。</li>
+    <li class="list-group-item">&rsaquo; 改变语法来识别文字格式的运算符例如 <code>add</code>, <code>sub</code>, <code>mul</code>, <code>div</code>。</li>
+    <li class="list-group-item">&rsaquo; 改变语法来识别全部的十进制数字例如 <code>0.01</code>, <code>5.21</code>, or <code>10.2</code>。</li>
+    <li class="list-group-item">&rsaquo; 改变语法使得运算符以传统的方式放在两个表达式之间。</li>
+    <li class="list-group-item">&rsaquo; 使用前面章节的语法解析 <code>Doge</code>，你必须添加输入的<em>开始</em>和<em>结束</em>!</li>
   </ul>
 </div>
 

@@ -1,5 +1,5 @@
 CACHE MANIFEST
-# Revision 1407742398475
+# Revision 1408208879365
 
 CACHE:
 faq.html
@@ -14,8 +14,8 @@ functions.html
 installation.html
 interactive_prompt.html
 languages.html
-q_expressions.html
 parsing.html
+q_expressions.html
 s_expressions.html
 standard_library.html
 strings.html
