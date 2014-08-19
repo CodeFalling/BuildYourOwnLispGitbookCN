@@ -1,17 +1,18 @@
-Evaluation
+ 求值(Evaluation)
 ==========
 
 
-Trees
+树(Tree)
 -----
 
-Now we can read input, and we have it structured internally, but we are still unable to evaluate it. In this chapter we add the code that evaluates this structure and actually performs the computations encoded within.
+现在我们可以读取输入，并且在内部用结构体表示，但是我们仍然不能对其求值。在这个章节我们添加对结构体求值的代码，并且真正的执行里面的计算。
 
-This internal structure is what we saw printed out by the program in the previous chapter. It is called an *Abstract Syntax Tree*, and it represents the structure of the program based on the input entered by the user. At the leaves of this tree are numbers and operators - the actual data to be processed. At the branches are the rules used to produce this part of the tree - the information on how to traverse and evaluate it.
+这个内部结构体就是我们在之前的章节看到的打印出来的。它叫做一个 *抽象语法树*，它表示了用户输入的程序的结构。在它的叶子上是数字和操作符 - 实际上要处理的数据。在它的分支上则是产生这部分树的规则 - 关于如何遍历和计算它的信息。
 
 ![tree](img/tree.png "Abstract Christmas Tree &bull; A seasonal variation")
 
-Before working out exactly how we are going to do this traversal, lets see exactly how this structure is defined internally. If we peek inside `mpc.h` we can have a look at the definition of `mpc_ast_t`, which is the data structure we got from the parse.
+在解决我们如何遍历之前，我们来看一看这个结构体在内部是如何定义的。如果我们看一看 `mpc.h` 的内容我们可以看到 `mpc_ast_t` 的定义， 这是我们从解析器得到的数据结构。
+
 
 ```c
 typedef struct mpc_ast_t {
@@ -22,30 +23,30 @@ typedef struct mpc_ast_t {
 } mpc_ast_t;
 ```
 
-This struct has a number of fields we can access. Lets take a look at them one by one.
+这个结构体有几个我们可以使用的域。让我们一个一个的看看。
 
-The first field is `tag`. When we printed out the tree this was the information that precluded the contents of the node. It was a string containing a list of all the rules used to parse that particular item. For example `expr|number|regex`.
+第一个域是 `tag`。当我们打印这个树的时候这是在节点内容钱的信息。这是一个字符串，包含一个由用来解析特定项的规则构成的列表，例如 `expr|number|regex`。
 
-This `tag` field is going to be important as it lets us see what type of thing the node is.
+`tag` 域很重要因为它让我们看到节点的类型。
 
-The second field is `contents`. This will contain the actual contents of the node such as `'*'`, `'('` or `'5'`. You'll notice for branches this is empty, but for leaves we can use it to find the operator or number to use.
+第二个节点是 `contents`。它会包含当前节点的内容例如 `'*'`, `'('` 或者 `'5'`。你会发现对于分支它是空的，但是对于叶我们可以用它来找到运算符或者数字。
 
-Finally we see two fields that are going to help us traverse the tree. These are `children_num` and `children`. The first field tells us how many children a node has, and the second is an array of these children.
+最后我们看两个可以帮助我们遍历树的域。它们是 `children_num` 和 `children`。第一个域告诉我们一个节点有多少子节点，第二个是这些子节点组成的数组。
 
-The type of the `children` field is `mpc_ast_t**`. This is a double pointer type. It isn't as scary as it looks and will be explained in greater detail in later chapters. For now you can think of it as a list of the child nodes of the this tree.
+`children` 域的类型是 `mpc_ast_t**`。这是一个双重指针类型。它并不像看起来那么可怕并且会在后面的章节详细解释。现在你可以把它看做这个树的子节点组成的数组。
 
-We can access a child node, by accessing this field using array notation. This is done by writing the field name `children` and suffixing it with square brackets containing the index of the child to access. For example to access the first child of the node we can use `children[0]`. Notice that C counts its array indices from `0`.
+我们可以通过使用数组符号访问这个域来访问一个子节点。 只要在域的名字 `children` 后加上一对包含要访问的子节点序号的方括号就可以做到。例如访问第一个子节点我们可以使用 `children[0]`。注意 C 语言的数组序号从 0 开始计数。
 
-Because the type `mpc_ast_t*` is a *pointer* to a struct, there is a slightly different syntax to access its fields. We need to use an arrow `->` instead of a dot `.`. There is no fundamental reason for this switch in operators, so for now just remember that field access of pointer types uses an arrow.
+因为 `mpc_ast_t*` 的类型是一个指向结构体的 *指针* ，所以访问它的域有一点不同。我们需要用一个箭头 `->` 而不是一个点 `.`。 采取这个符号没有什么原因，所以我们现在只要记住访问一个指针类型的域使用箭头。
 
 ```c
-/* Load AST from output */
+/* 从输出加载 AST(抽象语法树) */
 mpc_ast_t* a = r.output;
 printf("Tag: %s\n", a->tag);
 printf("Contents: %s\n", a->contents);
 printf("Number of children: %i\n", a->children_num);
 
-/* Get First Child */
+/* 获取第一个子节点 */
 mpc_ast_t* c0 = a->children[0];
 printf("First Child Tag: %s\n", c0->tag);
 printf("First Child Contents: %s\n", c0->contents);
@@ -53,22 +54,22 @@ printf("First Child Number of children: %i\n", c0->children_num);
 ```
 
 
-Recursion
+递归(Recursion)
 ---------
 
-There is a funny thing about this tree structure. It refers to itself. Each of its children are themselves trees again, and the children of those children are trees yet again. Just like our languages, and re-write rules, data in this structure contains repeated substructures, that resemble their parents.
+树的结构很有趣。它指向他自己。他们的每一个子节点又是一个树，子节点的子节点又是树。就像我们的语言，重写规则，结构体的数据中又包含重复的子结构体，子结构体又和母节点一样。
 
 ![recursion](img/recursion.png "Recursion &bull; Dangerous in a fire")
 
-This pattern of repeated substructures could go on and on. Clearly if we want a function which can work on all possible trees we can't look just a couple of nodes down, we have to define it to work on trees of any depth.
+这种重复子结构体的模式还能继续下去。如果我们想要一个函数能够对所有的树有效，我们不能只看几个节点，我们必须让它对任何深度的树都有效。
 
-Luckily we can do this, by exploiting the nature of how these substructures repeat, and using a technique called *recursion*.
+幸运的是我们可以做到这一点，通过利用子结构体重复的性质和一个叫做 *递归(recursion)* 的技术。
 
-Put simply a *recursive function* is one that calls itself as some part of its calculation.
+简单的 *递归函数(recursive function)* 就是它将自己作为运算的一部分调用。
 
-It sounds weird for a function to be defined in terms of itself. But consider that functions can give different outputs when supplied with different inputs. If we give some changed, or different inputs to a recursive call to the same function, and provide a way for this function to not call itself again under certain conditions, we can be more confident this *recursive function* is doing something useful.
+一个函数自己定义自己听起来有些怪异。但是考虑到函数会根据不同的输入给出不同的输出。如果我们做成一些改变，或者给不同的输入给一个调用同样函数的递归，并且提供一个方法让这个函数在当前条件下不要再次调用自己，我们就更加肯定*递归函数*能够做一些有用的事情。
 
-As an example we can write a recursive function which will count the number of nodes in our tree structure.
+作为一个例子我们可以写出一个可以统计我们的树结构的节点数目的递归函数。
 
 To begin we work out how it will act in the most simple case, if the input tree has no children. In this case we know the result is simply one. Now we can go on to define the more complex case, if the tree has one or more children. In this case the result will be one (for the node itself), plus the number of nodes in all of those children.
 
