@@ -71,11 +71,11 @@ printf("First Child Number of children: %i\n", c0->children_num);
 
 作为一个例子我们可以写出一个可以统计我们的树结构的节点数目的递归函数。
 
-To begin we work out how it will act in the most simple case, if the input tree has no children. In this case we know the result is simply one. Now we can go on to define the more complex case, if the tree has one or more children. In this case the result will be one (for the node itself), plus the number of nodes in all of those children.
+我们从搞清楚它在大多数简单的情况下如何表现开始，如果输入的树没有子节点。在这种情况下我们知道结果就是 1。现在我们可以继续定义更加复杂的情况，如果树有一个或者更多子节点。在这种情况下结果是 1 (节点本身)加上全部子节点的节点数目。
 
-But how do we find the number of nodes in all of the children? Well we can use the function we are in the process defining! *Yeah, Recursion.*
+但是我们如何找出全部子节点的节点数目? 我们可以使用我们正在定义的函数! *是的，递归*
 
-In C we might write it something like this.
+在 C 语言里我们可能把它写成类似下面的代码。
 
 ```c
 int number_of_nodes(mpc_ast_t* t) {
@@ -90,17 +90,17 @@ int number_of_nodes(mpc_ast_t* t) {
 }
 ```
 
-Recursive functions are weird because they require an odd leap of faith. First we have to assume we have some function which does something correctly already, and then we have to go about using this function, to write the initial function we assumed we had!
+递归函数看起来很怪异。首先我们需要假定我们已经有一些正确工作的函数，然后我们就要使用这个函数，来写我们假定已经有的最初代码!
 
-Like most things, recursive functions almost always end up following a similar pattern. First a *base case* is defined. This is the case that ends the recursion, such as `t->children_num == 0` in our previous example. After this the *recursive case* is defined, such as `t->children_num >= 1` in our previous example, which breaks down a computation into smaller parts, and calls itself recursively to compute those parts, before combining them together.
+像大多数事情一样，递归函数几乎总是以一个相似的方式结束。首先一个定义 *base case*。这是终止递归的情况，例如我们前面的例子中 `t->children_num == 0` 。然后定义 *recursive case* ，例如我们前面的例子中的 `t->children_num >= 1` 。它将计算过程分成更小的部分，然后递归的调用他自己来计算这一部分，最后将他们并在一起。
 
-Recursive functions can take some thought, so pause now and ensure you understand them before continuing onto other chapters because we'll be making good use of them in the rest of the book. If you are still uncertain, you can check out some of the bonus marks for this chapter to practice.
+递归函数可能需要思考一会，所以暂停下来保证你在继续其他章节前理解了它们，因为我们在树下剩下的部分将要好好的利用他们。如果你仍然不确定，你可以挑一些本章的附加题作为联系。
 
 
-Evaluation
+求值(Evaluation)
 ----------
 
-To evaluate the parse tree we are going to write a recursive function. But before we get started, let us try and see what observations we can make about the structure of the tree we get as input. Try printing out some expressions using your program from the previous chapter. See what you can notice.
+为了计算解析树我们将要写一个递归函数。但是在我们开始之前，让我们试试并看看作为输入的树结构有什么特点。试着用你上一章的程序打印一些表达式。看看有什么能注意的。
 
 ```lispy
 lispy> + 1 (* 5 4)
@@ -117,35 +117,35 @@ lispy> + 1 (* 5 4)
   regex:
 ```
 
-One observation is that if a node is tagged with `number` it is always a number, has no children, and we can just convert the contents to an integer. This will act as the *base case* in our recursion.
+其中一个可以观察到的是一个用 `number` 标记的节点总是一个数字，没有子节点，并且我们可以直接将它的内容转换成一个数字。就像我们的递归中的 *base case*。
 
-If a node is tagged with `expr`, and is *not* a `number`, we need to look at its second child (the first child is always `'('`) and see which operator it is. Then we need to apply this operator to the *evaluation* of the remaining children, excluding the final child which is always `')'`. This is our *recursive case*. This also needs to be done for the root node.
+如果一个节点被用 `expr` 标记，而且*并不是* `number`，我们需要看看第二个子节点(第一个子节点总是`'()'`) 看一看它是哪一个运算符。然后我们需要使用这个运算符来*计算*剩下的子节点，不包括总是 `')'` 的最后一个子节点。 这是我们的 *recursive case*。根节点也需要这样做。
 
-When we evaluate our tree, just like when counting the nodes, we'll need to accumulate the result. To represent this result we'll use the C type `long` which means a *long* *integer*.
+当我们计算我们的树时, 就像统计节点的数目一样，我们需要累计结果。为了表示结果我们要使用 C 类型 `long`，这表示一个*长**整数*。
 
-To detect the tag of a node, or to get a number from a node, we will need to make use of the `tag` and `contents` fields. These are *string* fields, so we are going to have to learn a couple of string functions first.
+为了探测节点的标记，或者从节点获取一个数字，我们将要利用 `tag` 和 `contents` 域。 这些是*字符串*域，所以我们先要学一些字符串函数。
 
 <table class='table'>
-  <tr><td>`atoi`</td><td>Converts a `char*` to a `long`.</td></tr>
-  <tr><td>`strcmp`</td><td>Takes as input two `char*` and if they are equal it returns `0`.</td></tr>
-  <tr><td>`strstr`</td><td>Takes as input two `char*` and returns a pointer to the location of the second in the first, or `0` if the second is not a sub-string of the first.</td></tr>
+  <tr><td>`atoi`</td><td>将一个 `char*` 转换成 `long`.</td></tr>
+  <tr><td>`strcmp`</td><td>比较两个 `char*` 若它们相等则返回 `0`。</td></tr>
+  <tr><td>`strstr`</td><td>接受两个 `char*` 作为输入，并返回第二个字符串在第一个字符串中的位置，如果第二个字符串不是第一个字符串的子字符串则返回 `0` 。</td></tr>
 </table>
 
-We can use `strcmp` to check which operator to use, and `strstr` to check if a tag contains some substring. Altogether our recursive evaluation function looks like this.
+我们可以使用 `strcmp` 来检查用的是哪一个运算符，用 `strstr` 来检查一个标记(tag)是否包含一个子字符串。总的来说，我们的递归函数看起来像这样。 
 
 ```c
 long eval(mpc_ast_t* t) {
 
-  /* If tagged as number return it directly, otherwise expression. */
+  /* 如果标记为 number 则直接返回它，否则为表达式。 */
   if (strstr(t->tag, "number")) { return atoi(t->contents); }
 
-  /* The operator is always second child. */
+  /* 运算符总是第二个子节点。 */
   char* op = t->children[1]->contents;
 
-  /* We store the third child in `x` */
+  /* 我们将第三个子节点存储在 `x` 中 */
   long x = eval(t->children[2]);
 
-  /* Iterate the remaining children, combining using our operator */
+  /* 迭代剩下的子节点，用我们的运算符将它们合并 */
   int i = 3;
   while (strstr(t->children[i]->tag, "expr")) {
     x = eval_op(x, op, eval(t->children[i]));
@@ -156,10 +156,10 @@ long eval(mpc_ast_t* t) {
 }
 ```
 
-We can define the `eval_op` function as follows. It takes in a number, an operator string, and another number. It tests for which operator is passed in, an performs the corresponding C operation on the inputs.
+我们可以像下面这样定义 `eval_op` 函数。它接受一个数字，一个运算符的字符串，和另外一个数字作为参数。它测试被传进来的是哪一个运算符，并执行对应的 C 运算符。
 
 ```c
-/* Use operator string to see which operation to perform */
+/* 使用运算符字符串来看看要执行那个运算符 */
 long eval_op(long x, char* op, long y) {
   if (strcmp(op, "+") == 0) { return x + y; }
   if (strcmp(op, "-") == 0) { return x - y; }
@@ -170,12 +170,12 @@ long eval_op(long x, char* op, long y) {
 ```
 
 
-Printing
+打印(Printing)
 --------
 
-Instead of printing the tree we now want to print the result of the evaluation. Therefore we need to pass the tree into our `eval` function, and print the result we get using `printf` and the specifier `%li`, which is used for `long` type.
+我们现在希望能够打印计算的结果而不是树。因此我们需要将树传递给我们的 `eval` 函数，为了打印结果我们需要使用 `printf` 和指示符 `%li`，这用于 `long` 类型。
 
-We also need to remember to delete the output tree after we are done evaluating it.
+我们还要记得在完成计算后删除输出的树We also need to remember to delete the output tree after we are done evaluating it.
 
 ```c
 long result = eval(r.output);
@@ -183,7 +183,7 @@ printf("%li\n", result);
 mpc_ast_delete(r.output);
 ```
 
-If all of this is successful we should be able to do some basic maths with our new programming language!
+如果这些都成功了我们应该能够用我们的新语言做一些基础的数学运算了！
 
 ```lispy
 Lispy Version 0.0.0.0.3
@@ -199,7 +199,7 @@ lispy>
 ```
 
 
-Reference
+参考
 ---------
 
 <div class="panel-group alert alert-warning" id="accordion">
@@ -318,20 +318,20 @@ int main(int argc, char** argv) {
   </div>
 </div>
 
-Bonus Marks
+附加题
 -----------
 
 <div class="alert alert-warning">
   <ul class="list-group">
-    <li class="list-group-item">&rsaquo; Write a recursive function to compute the number of leaves of a tree.</li>
-    <li class="list-group-item">&rsaquo; Write a recursive function to compute the number of branches of a tree.</li>
-    <li class="list-group-item">&rsaquo; Write a recursive function to compute the most number of children spanning from one branch of a tree.</li>
-    <li class="list-group-item">&rsaquo; How would you use `strstr` to see if a node was tagged as an `expr`.</li>
-    <li class="list-group-item">&rsaquo; How would you use `strcmp` to see if a node had the contents `'('` or `')'`.</li>
-    <li class="list-group-item">&rsaquo; Add the operator `%`, which returns the remainder of division. For example `% 10 6` is `4`.</li>
-    <li class="list-group-item">&rsaquo; Add the operator `^`, which raises one number to another. For example `^ 4 2` is `16`.</li>
-    <li class="list-group-item">&rsaquo; Add the function `min`, which returns the smallest number. For example `min 1 5 3` is `1`.</li>
-    <li class="list-group-item">&rsaquo; Add the function `max`, which returns the biggest number. For example `max 1 5 3` is `5`.</li>
-    <li class="list-group-item">&rsaquo; Change the minus operator `-` so that when it receives one argument it negates it.</li>
+    <li class="list-group-item">&rsaquo; 写一个递归函数来计算树叶的数目。</li>
+    <li class="list-group-item">&rsaquo; 写一个递归函数来计算树的分支的数目。</li>
+    <li class="list-group-item">&rsaquo; 写一个递归函数来计算一个分支中子节点出现次数最多的数字。</li>
+    <li class="list-group-item">&rsaquo; 你如何使用 `strstr` 来看一个节点是否被标记为 `expr`。</li>
+    <li class="list-group-item">&rsaquo; 你如何使用 `strcmp` 来看一个节点的内容是否为 `'('` 或者 `')'`。</li>
+    <li class="list-group-item">&rsaquo; 增加运算符 `%`, 返回除法的余数。例如 `% 10 6` 的结果是 `4`。</li>
+    <li class="list-group-item">&rsaquo; 增加运算符 `^`, 进行次方运算。例如 `^ 4 2` 的结果是 `16`。</li>
+    <li class="list-group-item">&rsaquo; 增加运算符 `min`, 返回最小的数字。例如 `min 1 5 3` 的结果是 `1`。</li>
+    <li class="list-group-item">&rsaquo; 增加运算符 `max`, 返回最大的数字。例如 `max 1 5 3` 的结果是 `5`。</li>
+    <li class="list-group-item">&rsaquo; 改变运算符 `-`，当它只接收到一个参数时对其取反。</li>
   </ul>
 </div>
