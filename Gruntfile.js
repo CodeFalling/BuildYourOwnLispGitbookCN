@@ -12,12 +12,12 @@ module.exports = function (grunt) {
                 input: "./",
                 title: "Build Your Own Lisp",
                 description: "Learn C and make a Lisp Dialect",
-                github: "TheThirdOne/BuildYourOwnLispGitbook"
+                github: "CodeFalling/BuildYourOwnLispGitbookCN"
             }
         },
         'gh-pages': {
             options: {
-                base: '.grunt/gitbook'
+                base: '_book'
             },
             src: ['**']
         },

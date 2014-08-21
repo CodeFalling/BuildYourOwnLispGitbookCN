@@ -4,10 +4,10 @@
     <head>
         
         <meta charset="UTF-8">
-        <title>Parsing | 介绍</title>
+        <title>Parsing | Build Your Own Lisp</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
-        <meta name="generator" content="GitBook 0.7.1">
+        <meta name="generator" content="GitBook 0.5.6">
         <meta name="HandheldFriendly" content="true"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
         <meta name="apple-mobile-web-app-capable" content="yes">
@@ -34,7 +34,7 @@
 
 
         
-    <div class="book" data-github="CodeFalling/BuildYourOwnLispGitbookCN" data-level="5" data-basepath="." data-revision="1408641508973">
+    <div class="book" data-github="CodeFalling/BuildYourOwnLispGitbookCN" data-level="5" data-basepath="." data-revision="1408642610938">
     <div class="book-header">
     <!-- Actions Left -->
     <a href="#" class="btn pull-left toggle-summary" aria-label="Toggle summary"><i class="fa fa-align-justify"></i></a>
@@ -80,12 +80,16 @@
     
     <a href="#" target="_blank" class="btn pull-right twitter-sharing-link sharing-link" data-sharing="twitter" aria-label="Share on Twitter"><i class="fa fa-twitter"></i></a>
     
+
+    
+    <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/stargazers" target="_blank" class="btn pull-right count-star hidden-xs"><i class="fa fa-star-o"></i> Star (<span>-</span>)</a>
+    <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/watchers" target="_blank" class="btn pull-right count-watch hidden-xs"><i class="fa fa-eye"></i> Watch (<span>-</span>)</a>
     
 
     <!-- Title -->
     <h1>
         <i class="fa fa-spinner fa-spin"></i>
-        <a href="./" >介绍</a>
+        <a href="./" >Build Your Own Lisp</a>
     </h1>
 </div>
 
@@ -107,7 +111,7 @@
         
         
         <li>
-            <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/issues" target="blank" class="issues-link">Questions and Issues</a>
+            <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/issues" target="blank"class="issues-link">Questions and Issues</a>
         </li>
         
 
@@ -117,8 +121,6 @@
             <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/edit/master/parsing.md" target="blank" class="contribute-link">Edit and Contribute</a>
         </li>
         
-
-	
 
         
         <li class="divider"></li>
@@ -205,7 +207,7 @@
         </li>
     
         
-        <li class="chapter active" data-level="5" data-path="parsing.html">
+        <li class="chapter " data-level="5" data-path="parsing.html">
             
                 
                     <a href="./parsing.html">
@@ -475,9 +477,9 @@
                 
                     <section class="normal" id="section-gitbook_13">
                     
-                        <h1 id="-parsing">解析 (Parsing)</h1>
+                        <h1 id="-parsing-">解析 (Parsing)</h1>
 <p><img src="img/polish_man.png" alt="polish man" title="A Polish Nobleman &bull; A typical Polish Notation user"></p>
-<h2 id="-polish-notation">波兰表示法 (Polish Notation)</h2>
+<h2 id="-polish-notation-">波兰表示法 (Polish Notation)</h2>
 <p>为了尝试 <code>mpc</code> 我们将要实现一种类似我们的 Lisp 中的数学运算子的简单语法。它叫做<a href="http://en.wikipedia.org/wiki/Polish_notation" target="_blank">波兰表示法 (Polish Notation)</a>，这是一种操作符在操作数之前的算术表示方法。</p>
 <p>例如。。。</p>
 <table class='table' style='display: inline'>
@@ -497,7 +499,7 @@
 </table>
 
 
-<h2 id="-regular-expressions">正则表达式 (Regular Expressions)</h2>
+<h2 id="-regular-expressions-">正则表达式 (Regular Expressions)</h2>
 <p>借助我们已经了解的东西，应该能写出上面大部分的规则，但是 <em>Number</em> 和 <em>Program</em> 可能会有一些问题。他们包含着我们还没有学过如何表达的构造。我们不知道如何表达输入的开始和结束，可选的字符，或者是一个范围的字符。</p>
 <p>这些可以被表示，但是需要一个叫 <em>正则表达式 (Regular Expression)</em>的东西。正则表达式是描述一小段文本例如词或者数字的语法的方法。用正则表达式写的语法不能由符合规则构成，但是他们可以精确，简洁地控制什么是匹配的，什么是不匹配的。这里是一些写正则表达式的基本规则。</p>
 <table class='table'>
@@ -529,7 +531,7 @@
 </div>
 
 
-<h2 id="">波兰表示法的语法</h2>
+<h2 id="-">波兰表示法的语法</h2>
 <p>进一步的形式化上面的语法，并且用一些正则表达式，我们可以像下面写出波兰表示法的最终语法。读下面的代码并且验证它是否和我们用文字写的波兰表示法的语法相同。</p>
 <pre><code class="lang-c"><span class="hljs-comment">/* 创造一些解析器 */</span>
 mpc_parser_t* Number   = mpc_new(<span class="hljs-string">"number"</span>);
@@ -557,7 +559,7 @@ mpc_cleanup(<span class="hljs-number">4</span>, Number, Operator, Expr, Lispy);
   那应该是 <code>mpca_lang</code>，有一个 <code>a</code> 在末尾!
 </div>
 
-<h2 id="">解析用户输入</h2>
+<h2 id="-">解析用户输入</h2>
 <p>我们的代码为我们的<em>波兰表示法</em>语言创建了一个 <code>mpc</code> 解析器，但是我们实际上每次用户输入时都要<em>用</em>到它。我们需要修改我们的 <code>while</code> 循环而不是只是把用户的输入显示回去，它事实上将尝试用我们的解析器解析用户的输入。为了做到这一点，我们可以用下面的 <code>mpc</code> 代码替代调用 <code>printf</code> 函数，这用到了我们的解析器 <code>Lispy</code>.</p>
 <pre><code class="lang-c"><span class="hljs-comment">/* 尝试解析用户输入 */</span>
 mpc_result_t r;
@@ -603,7 +605,7 @@ lispy&gt;
 </div>
 
 
-<h2 id="">参考</h2>
+<h2 id="-">参考</h2>
 <div class="panel-group alert alert-warning" id="accordion">
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -692,7 +694,7 @@ int main(int argc, char** argv) {
 </div>
 
 
-<h2 id="">附加题</h2>
+<h2 id="-">附加题</h2>
 <div class="alert alert-warning">
   <ul class="list-group">
     <li class="list-group-item">&rsaquo; 写一个正则表达式来匹配全部由 <code>a</code> 或则 <code>b</code> 组成的字符串例如 <code>aababa</code> 或者 <code>bbaa</code>。</li>
@@ -727,7 +729,7 @@ int main(int argc, char** argv) {
 <script src="gitbook/app.js"></script>
 
     
-    <script src="https://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
 
     

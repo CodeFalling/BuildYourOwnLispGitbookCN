@@ -4,10 +4,10 @@
     <head>
         
         <meta charset="UTF-8">
-        <title>Interactive Prompt | 介绍</title>
+        <title>Interactive Prompt | Build Your Own Lisp</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
-        <meta name="generator" content="GitBook 0.7.1">
+        <meta name="generator" content="GitBook 0.5.6">
         <meta name="HandheldFriendly" content="true"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
         <meta name="apple-mobile-web-app-capable" content="yes">
@@ -34,7 +34,7 @@
 
 
         
-    <div class="book" data-github="CodeFalling/BuildYourOwnLispGitbookCN" data-level="3" data-basepath="." data-revision="1408641508973">
+    <div class="book" data-github="CodeFalling/BuildYourOwnLispGitbookCN" data-level="3" data-basepath="." data-revision="1408642610938">
     <div class="book-header">
     <!-- Actions Left -->
     <a href="#" class="btn pull-left toggle-summary" aria-label="Toggle summary"><i class="fa fa-align-justify"></i></a>
@@ -80,12 +80,16 @@
     
     <a href="#" target="_blank" class="btn pull-right twitter-sharing-link sharing-link" data-sharing="twitter" aria-label="Share on Twitter"><i class="fa fa-twitter"></i></a>
     
+
+    
+    <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/stargazers" target="_blank" class="btn pull-right count-star hidden-xs"><i class="fa fa-star-o"></i> Star (<span>-</span>)</a>
+    <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/watchers" target="_blank" class="btn pull-right count-watch hidden-xs"><i class="fa fa-eye"></i> Watch (<span>-</span>)</a>
     
 
     <!-- Title -->
     <h1>
         <i class="fa fa-spinner fa-spin"></i>
-        <a href="./" >介绍</a>
+        <a href="./" >Build Your Own Lisp</a>
     </h1>
 </div>
 
@@ -107,7 +111,7 @@
         
         
         <li>
-            <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/issues" target="blank" class="issues-link">Questions and Issues</a>
+            <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/issues" target="blank"class="issues-link">Questions and Issues</a>
         </li>
         
 
@@ -117,8 +121,6 @@
             <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/edit/master/interactive_prompt.md" target="blank" class="contribute-link">Edit and Contribute</a>
         </li>
         
-
-	
 
         
         <li class="divider"></li>
@@ -173,7 +175,7 @@
         </li>
     
         
-        <li class="chapter active" data-level="3" data-path="interactive_prompt.html">
+        <li class="chapter " data-level="3" data-path="interactive_prompt.html">
             
                 
                     <a href="./interactive_prompt.html">
@@ -475,13 +477,13 @@
                 
                     <section class="normal" id="section-gitbook_11">
                     
-                        <h1 id="interactive-prompt">交互式提示符(interactive prompt)</h1>
-<h2 id="read-evaluate-print">读取，计算，打印(Read, Evaluate, Print)</h2>
+                        <h1 id="-interactive-prompt-">交互式提示符(interactive prompt)</h1>
+<h2 id="-read-evaluate-print-">读取，计算，打印(Read, Evaluate, Print)</h2>
 <p><img src="img/reptile.png" alt="reptile" title="Reptile &bull; Sort of like REPL"></p>
 <p>既然我们打造我们自己的编程语言，我们需要和它交互的方法。C语言使用了一个编译器，所以你可以修改程序，重新编译然后运行它。如果我们能做的更好并且能够动态的和编程语言交互那就更棒了。然后我们就很快的在若干条件下测试它的特性。为了做到这一点我们要构造一个叫做<em>交互式提示符(interactive prompt)</em>的东西。</p>
 <p>这是一个程序，它可以提示用户输入，并且得到输入后返回一些信息。用这个是测试我们编程语言的最简单的方法。这种系统也叫 <em>REPL</em>, 代笔 <em>read(读)</em>-<em>evaluate(计算)</em>-<em>print(打印)</em> <em>loop(循环)</em>。这是常用的一种和编程语言交互的方法，你可能在例如 <em>Python</em> 的其他语言里使用过。</p>
 <p>在建立一个完整的 <em>REPL</em> 之前我们将从一些简单的事情开始。我们将构造一个系统，它可以提示用户，并且直接将输入返回给用户。 如果我们做到这一点，我们以后就可以扩展它来解析用户输入并计算，就像一个实际的 Lisp 程序一样。</p>
-<h2 id="">一个交互式终端</h2>
+<h2 id="-">一个交互式终端</h2>
 <p>为了一个基本的体系，我们将要写一个循环，它反复的写出消息，然后等待输入。为了获取用户的输入我们可以用一个叫 <code>fget</code> 的函数，它读取输入直到遇到换行符。我们需要找一个地方来存储用户输入。为了这一点我们可以声明一个不变大小的输入缓冲区(buffer)。 </p>
 <p>一旦我们存储了用户的输入后就可以把它输出给用户，这要用到一个叫做 <code>printf</code> 函数。</p>
 <pre><code class="lang-c"><span class="hljs-preprocessor">#include &lt;stdio.h&gt;</span>
@@ -532,7 +534,7 @@
 </div>
 
 
-<h2 id="">编译</h2>
+<h2 id="-">编译</h2>
 <p>你可以使用和第二章中一样的命令编译</p>
 <pre><code class="lang-shell">cc -std=c99 -Wall prompt.c -o prompt
 </code></pre>
@@ -548,7 +550,7 @@ lispy&gt; Stop being so rude!
 No You&#39;re a Stop being so rude!
 lispy&gt;
 </code></pre>
-<h2 id="">编辑输入</h2>
+<h2 id="-">编辑输入</h2>
 <p>如果你正在 Linux 或者是 Mac 下工作你将会发现在你输入时使用方向键时有一些奇怪的表现。</p>
 <pre><code class="lang-lispy">Lispy Version 0.0.0.0.3
 Press Ctrl+c to Exit
@@ -615,7 +617,7 @@ undefined reference to `add_history&#39;
 </div>
 
 
-<h2 id="c">C语言的预处理器</h2>
+<h2 id="c-">C语言的预处理器</h2>
 <p>对于一个小工程来说，根据不同的系统写不同的代码可能没有关系 ，但是如果我想把我的源代码发给一个正在用不同操作系统的朋友，让他来协助这个工程，那可能就会引发问题。在一个理想的世界我希望我的源代码能够在任何一个地方或电脑编译。这是C语言中一个常见的问题，它叫做可移植性 。不会总是有一个简单或正确的方案。</p>
 <p><img src="img/octopus.png" alt="octopus" title="Octopus &bull; Sort of like Octothorpe"></p>
 <p>但是 C 提供了一个机制来帮忙，叫做<em>预处理器</em>。</p>
@@ -673,7 +675,7 @@ undefined reference to `add_history&#39;
   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 }
 </code></pre>
-<h2 id="">参考</h2>
+<h2 id="-">参考</h2>
 <div class="panel-group alert alert-warning" id="accordion">
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -827,7 +829,7 @@ int main(int argc, char** argv) {
   </div>
 
 <p></div></p>
-<h2 id="">附加题</h2>
+<h2 id="-">附加题</h2>
 <div class="alert alert-warning">
 <ul class="list-group">
   <li class="list-group-item">&rsaquo; 将提示符从 <code>lispy&gt;</code> 修改成你自己的选择。</li>
@@ -863,7 +865,7 @@ int main(int argc, char** argv) {
 <script src="gitbook/app.js"></script>
 
     
-    <script src="https://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
 
     

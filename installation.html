@@ -4,10 +4,10 @@
     <head>
         
         <meta charset="UTF-8">
-        <title>Installation | 介绍</title>
+        <title>Installation | Build Your Own Lisp</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
-        <meta name="generator" content="GitBook 0.7.1">
+        <meta name="generator" content="GitBook 0.5.6">
         <meta name="HandheldFriendly" content="true"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
         <meta name="apple-mobile-web-app-capable" content="yes">
@@ -34,7 +34,7 @@
 
 
         
-    <div class="book" data-github="CodeFalling/BuildYourOwnLispGitbookCN" data-level="1" data-basepath="." data-revision="1408641508973">
+    <div class="book" data-github="CodeFalling/BuildYourOwnLispGitbookCN" data-level="1" data-basepath="." data-revision="1408642610938">
     <div class="book-header">
     <!-- Actions Left -->
     <a href="#" class="btn pull-left toggle-summary" aria-label="Toggle summary"><i class="fa fa-align-justify"></i></a>
@@ -80,12 +80,16 @@
     
     <a href="#" target="_blank" class="btn pull-right twitter-sharing-link sharing-link" data-sharing="twitter" aria-label="Share on Twitter"><i class="fa fa-twitter"></i></a>
     
+
+    
+    <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/stargazers" target="_blank" class="btn pull-right count-star hidden-xs"><i class="fa fa-star-o"></i> Star (<span>-</span>)</a>
+    <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/watchers" target="_blank" class="btn pull-right count-watch hidden-xs"><i class="fa fa-eye"></i> Watch (<span>-</span>)</a>
     
 
     <!-- Title -->
     <h1>
         <i class="fa fa-spinner fa-spin"></i>
-        <a href="./" >介绍</a>
+        <a href="./" >Build Your Own Lisp</a>
     </h1>
 </div>
 
@@ -107,7 +111,7 @@
         
         
         <li>
-            <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/issues" target="blank" class="issues-link">Questions and Issues</a>
+            <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/issues" target="blank"class="issues-link">Questions and Issues</a>
         </li>
         
 
@@ -117,8 +121,6 @@
             <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/edit/master/installation.md" target="blank" class="contribute-link">Edit and Contribute</a>
         </li>
         
-
-	
 
         
         <li class="divider"></li>
@@ -141,7 +143,7 @@
         </li>
     
         
-        <li class="chapter active" data-level="1" data-path="installation.html">
+        <li class="chapter " data-level="1" data-path="installation.html">
             
                 
                     <a href="./installation.html">
@@ -475,22 +477,22 @@
                 
                     <section class="normal" id="section-gitbook_10">
                     
-                        <h1 id="">安装和配置</h1>
-<h2 id="">安装</h2>
+                        <h1 id="-">安装和配置</h1>
+<h2 id="-">安装</h2>
 <p><img src="img/cattop.png" alt="capttop" title="Cat &bull; Install at own risk"></p>
 <p>在我们开始用C语言编程之前，我们需要安装一些东西和配置我们的环境。因为C是如此通用的编程语言所以这些事情应该会比较简单。实质上我们要安装两个主要的东西。一个<em>文本编辑器</em>和一个<em>编译器</em>。</p>
-<h2 id="">文本编辑器</h2>
+<h2 id="-">文本编辑器</h2>
 <p>文本编辑器是一种让你用适合编程的方法来编辑文本文件的程序。</p>
 <p>在 <strong>Linux</strong> 上我推荐的文本编辑器是 <a href="http://projects.gnome.org/gedit/" target="_blank">gedit</a>。任何和你的发行版一起安装的基础的文本编辑器也可以很好的工作。如果你是一名 Vim 或者是 Emacs 的用户这些都很好。请不要使用 IDE。在这样一个小项目中并不需要它，并且不利于理解这是怎么一回事。</p>
 <p>在 <strong>Mac</strong> 上一个可以使用的简单的文本编辑器是 <a href="http://www.barebones.com/products/textwrangler/" target="_blank">TextWrangler</a>。如果你有不同的偏好也也不错，但是请不要使用 XCode 来编辑文本，这是一个小项目并且使用 IDE 不利于你理解这是怎么回事。</p>
 <p>在 <strong>Windows</strong> 上我选择的文本编辑器是 <a href="http://notepad-plus-plus.org/" target="_blank">Notepad++</a>。如果你有其他偏好的选择也不错。 请<em>不要</em>使用 <em>Visual Studio</em> 因为它对 C 语言编程没有很好的支持。如果你试图使用它你将会遇到很多问题。</p>
-<h2 id="">编译器</h2>
+<h2 id="-">编译器</h2>
 <p><em>编译器</em>是一个程序，它可以将C语言源代码转换成可以运行的程序。安装它的过程是不同的，这取决于你所运行的操作系统。</p>
 <p>编译和运行C程序也需要一些命令行的基本用法。这方面我将不会涉及，所以我会假设你至少熟悉使用命令行， 如果你担心这方面的问题可以在网上搜索信息使用它， 这和你的操作系统有关。</p>
 <p>在 <strong>Linux</strong> 上你可以通过下载一些包来安装一个编译器。如果你正在使用Ubuntu 或者 Debian 你可以通过下面的命令安装你需要的东西 <code>sudo apt-get install build-essential</code>. 如果你正在使用Fedora或者一个类似的 Linux 变种你可以使用下面的命令<code>su -c &quot;yum groupinstall development-tools&quot;</code>.</p>
 <p>在 <strong>Mac</strong> 上你可以通过安装并下载最新版的 XCode 来安装一个编译器。如果你不确定如何做这些事你可以在网上搜索&quot;安装xcode&quot;并且按照这些建议来。 你需要安装<em>命令行工具(Command Line Tools)</em>. 在 Mac OS X 10.9 上可以通过从命令行运行命令 <code>xcode-select --install</code> 来完成这些. 在 Mac OS X 10.9 之前的版本可以在 XCode Preferences, Downloads, 并选择 <em>Command Line Tools</em> 来安装</p>
 <p>在 <strong>Windows</strong> 上你可以下载并安装 <a href="http://www.mingw.org/&quot;" target="_blank">MinGW.</a>来安装一个编译器。如果你在使用安装器有时候它还会给你一个可能的包的列表。确保你至少选中了 <code>mingw32-base</code> 和 <code>msys-base</code>。一旦安装后你需要添加编辑器和其他程序的的路径到你的 <code>PATH</code> 系统变量中. 按照 <a href="href=&quot;http://www.computerhope.com/issues/ch000549.htm&quot;">这些指令</a>将  <code>;C:\MinGW\bin</code> 附加到叫做 <code>PATH</code> 的系统变量中。你可以创造这个变量如果它不存在。你可能需要重启 <code>cmd.exe</code> 来应用这些改变。这将会允许你在 <code>cmd.exe</code> 的命令行中运行一个编译器。他也会安装其他程序使得<code>cmd.exe</code>表现得更像一个 Unix 命令行。</p>
-<h2 id="">测试编译器</h2>
+<h2 id="-">测试编译器</h2>
 <p>通过在命令行里运行下面的命令来测试你的C语言编译器是否被正确安装。</p>
 <p><code>cc --version</code>
 如果你得到一些编译器版本信息，那么编译器应该被正确安装了。你准备好了！如果你得到任何形式的错误或是未找到命令，那么它并没有被准备好，你可能需要重启命令行或者你的电脑来使这些改变生效。</p>
@@ -513,7 +515,7 @@
 <p>这将编译 <code>hello_world.c</code> 里的代码，报告任何一个警告(warning),并且输出程序为一个叫做 <code>hello_world</code> 的新文件。我们用 <code>std=c99</code> 标记(flag)来告诉编译器我们在用C语言的哪一个<em>版本(version)</em>或者<em>标准(standard)</em>。这让编译器确信我们的代码是标准化的，所以用不同操作系统和编译器的人可以使用我们的代码。</p>
 <p>如果成功你应该看到当前文件夹输出的文件。你可以输入 <code>./hello_world</code>(或者<code>hello_world</code>在 Windows 下)。如果没有什么错误的话你应该可以看到一个友好的 <code>Hello,world!</code> 消息出现。</p>
 <p><strong>祝贺！</strong> 你已经编译运行了你的第一个C语言程序</p>
-<h2 id="">错误</h2>
+<h2 id="-">错误</h2>
 <p>如果有一些错误你的C语言程序编译过程可能会失败。这些问题的范围可能从简单的语法错误到其他难以理解的复杂错误。</p>
 <p>有时候编译器的错误信息可能会有意义，但是难以理解你可以尝试在网上搜索它。你应该看看能不能找到一个简洁的解释，并找出如何改正它。记住这一点：有很多人都曾面临和你一样的问题。</p>
 <p><img src="img/smash.png" alt="smash" title="Rage &bull; A poor debugging technique"></p>
@@ -527,7 +529,7 @@
 <p>对于更加自信的人来说一个叫做 <code>gdb</code> 的程序可以用来调试你的C程序。这可能很复杂难用，但是它也很强大而且能给你非常有价值的信息和错误以及产生错误的位置。关于如何使用 <code>gdb</code> 的信息可以在网络上找到。</p>
 <p>在 Mac 上最新版本的 OS X 没有自带 <code>gdb</code>。作为替代你可以用 <code>lldb</code> 做同样的工作。</p>
 <p>在 <strong>Linux</strong> 或者 <strong>Mac</strong> <code>valgrind</code> 可以帮助调试内存泄露和其他更严重的错误。Valgrind 是一个可以节约你数小时，甚至数天调试时间的工具。它并不难学会，所以强烈建议研究一下它。关于如何使用的信息可以在网上找到。</p>
-<h2 id="">文档</h2>
+<h2 id="-">文档</h2>
 <p>在这本书中你可能会遇到你不认识的一些函数或者一些示例代码。你可能会想这是什么。在这种情况下看看这些标准库的<a href="http://en.cppreference.com/w/c" target="_blank">在线文档</a>。这可以解释标准库的所有函数，它们做了什么，和怎么用它们。</p>
 <h2 id="reference">Reference</h2>
 <div class="alert alert-warning">
@@ -563,7 +565,7 @@ int main(int argc, char** argv) {
 </div>
 
 
-<h2 id="">附加题</h2>
+<h2 id="-">附加题</h2>
 <div class="alert alert-warning">
   <strong>这一节是干什么的?</strong>
 
@@ -606,7 +608,7 @@ int main(int argc, char** argv) {
 <script src="gitbook/app.js"></script>
 
     
-    <script src="https://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
 
     

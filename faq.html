@@ -4,10 +4,10 @@
     <head>
         
         <meta charset="UTF-8">
-        <title>FAQ | 介绍</title>
+        <title>FAQ | Build Your Own Lisp</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
-        <meta name="generator" content="GitBook 0.7.1">
+        <meta name="generator" content="GitBook 0.5.6">
         <meta name="HandheldFriendly" content="true"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
         <meta name="apple-mobile-web-app-capable" content="yes">
@@ -34,7 +34,7 @@
 
 
         
-    <div class="book" data-github="CodeFalling/BuildYourOwnLispGitbookCN" data-level="16" data-basepath="." data-revision="1408641508973">
+    <div class="book" data-github="CodeFalling/BuildYourOwnLispGitbookCN" data-level="16" data-basepath="." data-revision="1408642610938">
     <div class="book-header">
     <!-- Actions Left -->
     <a href="#" class="btn pull-left toggle-summary" aria-label="Toggle summary"><i class="fa fa-align-justify"></i></a>
@@ -80,12 +80,16 @@
     
     <a href="#" target="_blank" class="btn pull-right twitter-sharing-link sharing-link" data-sharing="twitter" aria-label="Share on Twitter"><i class="fa fa-twitter"></i></a>
     
+
+    
+    <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/stargazers" target="_blank" class="btn pull-right count-star hidden-xs"><i class="fa fa-star-o"></i> Star (<span>-</span>)</a>
+    <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/watchers" target="_blank" class="btn pull-right count-watch hidden-xs"><i class="fa fa-eye"></i> Watch (<span>-</span>)</a>
     
 
     <!-- Title -->
     <h1>
         <i class="fa fa-spinner fa-spin"></i>
-        <a href="./" >介绍</a>
+        <a href="./" >Build Your Own Lisp</a>
     </h1>
 </div>
 
@@ -107,7 +111,7 @@
         
         
         <li>
-            <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/issues" target="blank" class="issues-link">Questions and Issues</a>
+            <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/issues" target="blank"class="issues-link">Questions and Issues</a>
         </li>
         
 
@@ -117,8 +121,6 @@
             <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/edit/master/faq.md" target="blank" class="contribute-link">Edit and Contribute</a>
         </li>
         
-
-	
 
         
         <li class="divider"></li>
@@ -381,7 +383,7 @@
         </li>
     
         
-        <li class="chapter active" data-level="16" data-path="faq.html">
+        <li class="chapter " data-level="16" data-path="faq.html">
             
                 
                     <a href="./faq.html">
@@ -477,19 +479,19 @@
                     
                         <h1 id="frequently-asked-questions">Frequently Asked Questions</h1>
 <p><img src="img/me.png" alt="me" title="Me &bull; Drinking a beer"></p>
-<h2 id="who-are-you">Who are you?</h2>
+<h2 id="who-are-you-">Who are you?</h2>
 <p>Hello, my name is Daniel Holden. I&#39;m from the UK, and currently studying for a PhD at Edinburgh University. My research is in data driven tools for character animation.</p>
 <p>You may know me from one of my other projects such as <a href="http://libcello.org" target="_blank">Cello</a> or <a href="https://github.com/orangeduck/Corangea" target="_blank">Corange</a>. As well as hacking on C, I enjoy graphics, game development, and theory of computation.</p>
 <p>You can find my personal website <a href="http://theorangeduck.com/" target="_blank">here</a>. Or you can follow me on <a href="https://twitter.com/anorangeduck" target="_blank">twitter</a>.</p>
-<h2 id="why-dont-you-teach-arrays-in-this-book">Why don&#39;t you teach arrays in this book?</h2>
+<h2 id="why-don-t-you-teach-arrays-in-this-book-">Why don&#39;t you teach arrays in this book?</h2>
 <p>With an already steep learning curve arrays seemed like a convenient omission to make. Teaching arrays in C is a very easy way to confuse a beginner about pointers, which are a far more important concept to learn. In C, the ways in which arrays and pointers are the same, and yet different, are subtle and numerous. Excluding fixed sized arrays, which have different behaviour anyway, pointers represent a superset of the behaviour of arrays, and so in the context of this book, teaching arrays would have been no more than teaching syntactic sugar.</p>
 <p>Those interested in arrays are encouraged to find out more. The book <a href="http://c.learncodethehardway.org/" target="_blank">Learn C the Hard Way</a> takes the opposite approach to me, and teaches arrays first, with pointers being described as a variation. For those interested in arrays this might prove useful.</p>
-<h2 id="why-do-you-use-left-handed-pointer-syntax">Why do you use left-handed pointer syntax?</h2>
+<h2 id="why-do-you-use-left-handed-pointer-syntax-">Why do you use left-handed pointer syntax?</h2>
 <p>In this book I write the syntax for pointers in a left-handed way <code>int* x;</code>, rather than the standard right-handed convention <code>int *x;</code>.</p>
 <p>Ultimately this distinction is one of personal preference, but the vast majority of C code, as well as the C standards, are written using the right-handed style. This is clearly the default, and most correct way to write pointers, and so my choice might seem odd.</p>
 <p>I picked the left-handed version because I believe it is easier to teach to beginners. Having the asterisk on the left hand side emphasises <em>the type</em>. It is clearer to read, and makes it obvious that the asterisk is not a weird operator or modification to the variable. With the omission of arrays, and multi-variable declarations, this notation is also almost entirely consistent within this book, and when not, it is noted. K&amp;R themselves have <a href="http://blog.golang.org/gos-declaration-syntax" target="_blank">admitted</a> the <a href="http://cm.bell-labs.com/cm/cs/who/dmr/chist.html" target="_blank">confusion</a> of the right-handed syntax, made worse by historical baggage and rogue compiler implementations of the early years. For a learning resource I believe picking the left-handed version was the best approach.</p>
 <p>Once comfortable with the method behind C&#39;s declaration syntax, I encourage programmers to migrate toward the right-handed version.</p>
-<h2 id="why-are-there-no-macros-in-this-lisp">Why are there no Macros in this Lisp?</h2>
+<h2 id="why-are-there-no-macros-in-this-lisp-">Why are there no Macros in this Lisp?</h2>
 <p>By far the biggest gripe conventional Lisp programmers have with the Lisp in this book is the lack of Macros. Instead of Macros a new concept of Q-Expressions is used to delay evaluation. To conventional Lisp programmers Q-Expressions are confusing because their semantics differ subtly from the quote Macro.</p>
 <p>I use Q-Expressions instead of Macros for a couple of reasons.</p>
 <p>First of all I believe them to be easier for beginners than Macros. When evaluation is delayed it is always explicit, shown by the syntax, and not implicit in the function name. It also means that S-Expressions can never be returned by the prompt or seen in the wild. They are always evaluated.</p>
@@ -517,7 +519,7 @@
 <script src="gitbook/app.js"></script>
 
     
-    <script src="https://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
 
     

@@ -4,10 +4,10 @@
     <head>
         
         <meta charset="UTF-8">
-        <title>Evaluation | 介绍</title>
+        <title>Evaluation | Build Your Own Lisp</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
-        <meta name="generator" content="GitBook 0.7.1">
+        <meta name="generator" content="GitBook 0.5.6">
         <meta name="HandheldFriendly" content="true"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
         <meta name="apple-mobile-web-app-capable" content="yes">
@@ -34,7 +34,7 @@
 
 
         
-    <div class="book" data-github="CodeFalling/BuildYourOwnLispGitbookCN" data-level="6" data-basepath="." data-revision="1408641508973">
+    <div class="book" data-github="CodeFalling/BuildYourOwnLispGitbookCN" data-level="6" data-basepath="." data-revision="1408642610938">
     <div class="book-header">
     <!-- Actions Left -->
     <a href="#" class="btn pull-left toggle-summary" aria-label="Toggle summary"><i class="fa fa-align-justify"></i></a>
@@ -80,12 +80,16 @@
     
     <a href="#" target="_blank" class="btn pull-right twitter-sharing-link sharing-link" data-sharing="twitter" aria-label="Share on Twitter"><i class="fa fa-twitter"></i></a>
     
+
+    
+    <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/stargazers" target="_blank" class="btn pull-right count-star hidden-xs"><i class="fa fa-star-o"></i> Star (<span>-</span>)</a>
+    <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/watchers" target="_blank" class="btn pull-right count-watch hidden-xs"><i class="fa fa-eye"></i> Watch (<span>-</span>)</a>
     
 
     <!-- Title -->
     <h1>
         <i class="fa fa-spinner fa-spin"></i>
-        <a href="./" >介绍</a>
+        <a href="./" >Build Your Own Lisp</a>
     </h1>
 </div>
 
@@ -107,7 +111,7 @@
         
         
         <li>
-            <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/issues" target="blank" class="issues-link">Questions and Issues</a>
+            <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/issues" target="blank"class="issues-link">Questions and Issues</a>
         </li>
         
 
@@ -117,8 +121,6 @@
             <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/edit/master/evaluation.md" target="blank" class="contribute-link">Edit and Contribute</a>
         </li>
         
-
-	
 
         
         <li class="divider"></li>
@@ -221,7 +223,7 @@
         </li>
     
         
-        <li class="chapter active" data-level="6" data-path="evaluation.html">
+        <li class="chapter " data-level="6" data-path="evaluation.html">
             
                 
                     <a href="./evaluation.html">
@@ -475,8 +477,8 @@
                 
                     <section class="normal" id="section-gitbook_8">
                     
-                        <h1 id="-evaluation"> 求值(Evaluation)</h1>
-<h2 id="tree">树(Tree)</h2>
+                        <h1 id="-evaluation-"> 求值(Evaluation)</h1>
+<h2 id="-tree-">树(Tree)</h2>
 <p>现在我们可以读取输入，并且在内部用结构体表示，但是我们仍然不能对其求值。在这个章节我们添加对结构体求值的代码，并且真正的执行里面的计算。</p>
 <p>这个内部结构体就是我们在之前的章节看到的打印出来的。它叫做一个 <em>抽象语法树</em>，它表示了用户输入的程序的结构。在它的叶子上是数字和操作符 - 实际上要处理的数据。在它的分支上则是产生这部分树的规则 - 关于如何遍历和计算它的信息。</p>
 <p><img src="img/tree.png" alt="tree" title="Abstract Christmas Tree &bull; A seasonal variation"></p>
@@ -508,7 +510,7 @@ mpc_ast_t* c0 = a-&gt;children[<span class="hljs-number">0</span>];
 <span class="hljs-built_in">printf</span>(<span class="hljs-string">"First Child Contents: %s\n"</span>, c0-&gt;contents);
 <span class="hljs-built_in">printf</span>(<span class="hljs-string">"First Child Number of children: %i\n"</span>, c0-&gt;children_num);
 </code></pre>
-<h2 id="recursion">递归(Recursion)</h2>
+<h2 id="-recursion-">递归(Recursion)</h2>
 <p>树的结构很有趣。它指向他自己。他们的每一个子节点又是一个树，子节点的子节点又是树。就像我们的语言，重写规则，结构体的数据中又包含重复的子结构体，子结构体又和母节点一样。</p>
 <p><img src="img/recursion.png" alt="recursion" title="Recursion &bull; Dangerous in a fire"></p>
 <p>这种重复子结构体的模式还能继续下去。如果我们想要一个函数能够对所有的树有效，我们不能只看几个节点，我们必须让它对任何深度的树都有效。</p>
@@ -533,7 +535,7 @@ mpc_ast_t* c0 = a-&gt;children[<span class="hljs-number">0</span>];
 <p>递归函数看起来很怪异。首先我们需要假定我们已经有一些正确工作的函数，然后我们就要使用这个函数，来写我们假定已经有的最初代码!</p>
 <p>像大多数事情一样，递归函数几乎总是以一个相似的方式结束。首先一个定义 <em>base case</em>。这是终止递归的情况，例如我们前面的例子中 <code>t-&gt;children_num == 0</code> 。然后定义 <em>recursive case</em> ，例如我们前面的例子中的 <code>t-&gt;children_num &gt;= 1</code> 。它将计算过程分成更小的部分，然后递归的调用他自己来计算这一部分，最后将他们并在一起。</p>
 <p>递归函数可能需要思考一会，所以暂停下来保证你在继续其他章节前理解了它们，因为我们在树下剩下的部分将要好好的利用他们。如果你仍然不确定，你可以挑一些本章的附加题作为联系。</p>
-<h2 id="evaluation">求值(Evaluation)</h2>
+<h2 id="-evaluation-">求值(Evaluation)</h2>
 <p>为了计算解析树我们将要写一个递归函数。但是在我们开始之前，让我们试试并看看作为输入的树结构有什么特点。试着用你上一章的程序打印一些表达式。看看有什么能注意的。</p>
 <pre><code class="lang-lispy">lispy&gt; + 1 (* 5 4)
 &gt;:
@@ -590,7 +592,7 @@ mpc_ast_t* c0 = a-&gt;children[<span class="hljs-number">0</span>];
   <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
 }
 </code></pre>
-<h2 id="printing">打印(Printing)</h2>
+<h2 id="-printing-">打印(Printing)</h2>
 <p>我们现在希望能够打印计算的结果而不是树。因此我们需要将树传递给我们的 <code>eval</code> 函数，为了打印结果我们需要使用 <code>printf</code> 和指示符 <code>%li</code>，这用于 <code>long</code> 类型。</p>
 <p>我们还要记得在完成计算后删除输出的树We also need to remember to delete the output tree after we are done evaluating it.</p>
 <pre><code class="lang-c"><span class="hljs-keyword">long</span> result = eval(r.output);
@@ -609,7 +611,7 @@ lispy&gt; - (/ 10 2) 20
 -15
 lispy&gt;
 </code></pre>
-<h2 id="">参考</h2>
+<h2 id="-">参考</h2>
 <div class="panel-group alert alert-warning" id="accordion">
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -725,7 +727,7 @@ int main(int argc, char** argv) {
   </div>
 </div>
 
-<h2 id="">附加题</h2>
+<h2 id="-">附加题</h2>
 <div class="alert alert-warning">
   <ul class="list-group">
     <li class="list-group-item">&rsaquo; 写一个递归函数来计算树叶的数目。</li>
@@ -762,7 +764,7 @@ int main(int argc, char** argv) {
 <script src="gitbook/app.js"></script>
 
     
-    <script src="https://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
 
     

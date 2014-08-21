@@ -4,10 +4,10 @@
     <head>
         
         <meta charset="UTF-8">
-        <title>Languages | 介绍</title>
+        <title>Languages | Build Your Own Lisp</title>
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
         <meta name="description" content="">
-        <meta name="generator" content="GitBook 0.7.1">
+        <meta name="generator" content="GitBook 0.5.6">
         <meta name="HandheldFriendly" content="true"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
         <meta name="apple-mobile-web-app-capable" content="yes">
@@ -34,7 +34,7 @@
 
 
         
-    <div class="book" data-github="CodeFalling/BuildYourOwnLispGitbookCN" data-level="4" data-basepath="." data-revision="1408641508973">
+    <div class="book" data-github="CodeFalling/BuildYourOwnLispGitbookCN" data-level="4" data-basepath="." data-revision="1408642610938">
     <div class="book-header">
     <!-- Actions Left -->
     <a href="#" class="btn pull-left toggle-summary" aria-label="Toggle summary"><i class="fa fa-align-justify"></i></a>
@@ -80,12 +80,16 @@
     
     <a href="#" target="_blank" class="btn pull-right twitter-sharing-link sharing-link" data-sharing="twitter" aria-label="Share on Twitter"><i class="fa fa-twitter"></i></a>
     
+
+    
+    <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/stargazers" target="_blank" class="btn pull-right count-star hidden-xs"><i class="fa fa-star-o"></i> Star (<span>-</span>)</a>
+    <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/watchers" target="_blank" class="btn pull-right count-watch hidden-xs"><i class="fa fa-eye"></i> Watch (<span>-</span>)</a>
     
 
     <!-- Title -->
     <h1>
         <i class="fa fa-spinner fa-spin"></i>
-        <a href="./" >介绍</a>
+        <a href="./" >Build Your Own Lisp</a>
     </h1>
 </div>
 
@@ -107,7 +111,7 @@
         
         
         <li>
-            <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/issues" target="blank" class="issues-link">Questions and Issues</a>
+            <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/issues" target="blank"class="issues-link">Questions and Issues</a>
         </li>
         
 
@@ -117,8 +121,6 @@
             <a href="https://github.com/CodeFalling/BuildYourOwnLispGitbookCN/edit/master/languages.md" target="blank" class="contribute-link">Edit and Contribute</a>
         </li>
         
-
-	
 
         
         <li class="divider"></li>
@@ -189,7 +191,7 @@
         </li>
     
         
-        <li class="chapter active" data-level="4" data-path="languages.html">
+        <li class="chapter " data-level="4" data-path="languages.html">
             
                 
                     <a href="./languages.html">
@@ -475,8 +477,8 @@
                 
                     <section class="normal" id="section-gitbook_12">
                     
-                        <h1 id="">语言</h1>
-<h2 id="">什么是编程语言?</h2>
+                        <h1 id="-">语言</h1>
+<h2 id="-">什么是编程语言?</h2>
 <p>一个编程语言和真实的语言是很相似的。它背后有一个结构和一些规则。当我们阅读和书写自然语言时，我们不知不觉便学到了这些规则， 编程语言也是这样的。我们可以利用规则来理解他人，说话或者写出代码。</p>
 <p>20世纪50年代语言学家 <em>Noam Chomsky</em> 形式化了大量关于语言的 <a href="http://en.wikipedia.org/wiki/Chomsky_hierarchy" target="_blank">重要观察</a>。这些中的许多构成了我们今天的语言理解的基础。其中的一个就是观察自然语言的递归建立了递归和重复的子结构。</p>
 <p><img src="img/cat.png" alt="cat" title="Cat &bull; cannot speak or program"></p>
@@ -495,10 +497,10 @@
 <p>我们有几个方法来描述重写规则。其中一个方法就是原文。我们可能说一些像, &quot;一个<em>句子</em>必需包含一个<em>动词短语</em>&quot;，或者&quot;<em>动词短语</em> 可以是一个<em>动词</em>或者一个<em>副词</em>和一个<em>动词</em>&quot;。这个方法对人类来说不错，但是对于计算机来说理解起来太糢糊。编程时我们需要写更加正式的语法说明。</p>
 <p>为了写一个编程语言例如我们的 Lisp ，我们需要理解它的语法。为了阅读用户的输入我们需要写一个<em>语法</em>来描述它。然后我们就可以在用户输入的时候使用它，来判断输入是否有效。我们还可以用它构建结构化的内部表达， 这将让<em>理解</em>它，<em>计算</em>它，在内部表达计算机编码都更加简单。</p>
 <p>于是一个叫 <code>mpc</code> 的库便有了用武之地。</p>
-<h2 id="parser-combinators">解析器组合子(Parser Combinators)</h2>
+<h2 id="-parser-combinators-">解析器组合子(Parser Combinators)</h2>
 <p><code>mpc</code> 是一个可以自己写 <em>解析器组合子</em> 库。这意味着这个库可以让你构建能够理解和处理特定语言的程序。 这些叫做<em>(解析器)parsers</em>. 有很多不同的方法可以构造解析器，用一个<em>解析器组合子</em>库的优点是你构建<em>解析器</em>的过程将变得简单，只需要指定<em>语法</em> ... 之类的。</p>
 <p>很多<em>解析器组合子</em>库实际上只是让你写一些<em>看起来有点像</em>一个语法的代码，而不是真正的直接指定一个语法。在很多情况下这是可以的，但是很多情况下可能会显得笨重而复杂。幸运的是 <code>mpc</code> 让我们写<em>看起来像</em>一个语法的代码， <em>或者</em> 我们可以用特殊的符号来直接写一个语法!</p>
-<h2 id="">代码的语法</h2>
+<h2 id="-">代码的语法</h2>
 <p>那么，什么是<em>看起来像</em>一个语法的代码<em>? 让我们看一看 <code>mpc</code>，通过试着为一个语法写一些代码，这种语法能够识别 <a href="http://knowyourmeme.com/memes/doge" target="_blank">the language of Shiba Inu</a>. 一种如同 </em>Doge* 一样的口语。这种语言我们可以通过下面的代码定义。</p>
 <p>&rsaquo; 一个 <em>形容词(Adjective)</em> 是  <em>&quot;wow&quot;</em>, <em>&quot;many&quot;</em>, <em>&quot;so&quot;</em> 或者 <em>&quot;such&quot;</em>.
 &rsaquo; 一个 <em>名词(Noun)</em> 是 <em>&quot;lisp&quot;</em>, <em>&quot;language&quot;</em>, <em>&quot;c&quot;</em>, <em>&quot;book&quot;</em> 或者 <em>&quot;build&quot;</em>.
@@ -540,7 +542,7 @@ mpc_parser_t* Noun = mpc_or(<span class="hljs-number">5</span>,
 <span class="hljs-string">"so c"</span>
 </code></pre>
 <p>如果我们用更多的 <code>mpc</code> 函数，我们可以慢慢地建立解析器来解析越来越复杂的语言。The code we use <em>sort of</em> reads like a grammar, but becomes much more messy with added complexity. 因此，采取这种方法就不一定是一个简单的任务了。有一些有帮助的函数的文档都在<a href="http://github.com/orangeduck/mpc" target="_blank">mpc repository</a>，它们建立在简单的结构上，可以让繁杂的任务变得简单。这对于复杂的语言是一个简单的方法，它提供了一个细粒度很好的控制，但对我们的需求来说并不是必需的。 </p>
-<h2 id="">自然语法</h2>
+<h2 id="-">自然语法</h2>
 <p><code>mpc</code> 也允许我们写形式更加自然的语法。我们可以在一个长字符串里定义所有的事而不是用C函数这种看起来更加不像。在使用这种方法时我们不需要担心如何通过像 <code>mpcf_strfold</code>, 或者 <code>free</code> 这样的函数添加或废弃输入。 这些都被自动完成了！</p>
 <p>下面是我们如何用这种方法重建上面的例子。</p>
 <pre><code class="lang-c">mpc_parser_t* Adjective = mpc_new(<span class="hljs-string">"adjective"</span>);
@@ -584,7 +586,7 @@ mpc_cleanup(<span class="hljs-number">4</span>, Adjective, Noun, Phrase, Doge);
 <p>用上面描述的确认我上面写的和我们之前用代码指定的是等价的。</p>
 <p>这种指定语法的方法是我们下一章将要用到的。它一开始看起来可能铺天盖地的。语法看起来不能马上被理解。但是随着我们的继续你会对如何创建和编辑它们越来越熟悉。随意创造一些符号或者符号的概念，让它们写起来更加简单。一些附加题</p>
 <p>这一章是关于理论的，所以如果你要尝试附加题，不用太担心正确性。用正确的心态思考更加重要。一些附加题可能需要循环和递归的语法结构，所以如果你用到这些不要担心。</p>
-<h2 id="">参考</h2>
+<h2 id="-">参考</h2>
 <div class="panel-group alert alert-warning" id="accordion">
 
   <div class="panel panel-default">
@@ -671,7 +673,7 @@ int main(int argc, char** argv) {
   </div>
 
 <p></div></p>
-<h2 id="">附加题</h2>
+<h2 id="-">附加题</h2>
 <div class="alert alert-warning">
   <ul class="list-group">
     <li class="list-group-item">&rsaquo; 尝试写出更多 <code>Doge</code> 语言的字符串</li>
@@ -706,7 +708,7 @@ int main(int argc, char** argv) {
 <script src="gitbook/app.js"></script>
 
     
-    <script src="https://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
 
     
